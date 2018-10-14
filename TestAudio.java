@@ -22,94 +22,117 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * @author 70136
  */
 public class TestAudio {
-    
+    public swingcanvas canvas;
+    File file;
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws LineUnavailableException {
-        File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\17. 不安定な神様 (TV Ver.).wav");
+    
+    public TestAudio(File f) {
+        file=f;
+    }
+
+    
+    public  void main() throws LineUnavailableException {
+        //File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\33_Sparkling Daydream (Movie size).wav");
         AudioInputStream audioinputstream=null;
-        AudioInputStream out=null;
+        
         try {
-        audioinputstream=AudioSystem.getAudioInputStream(file);
-        out=AudioSystem.getAudioInputStream(file);
+            audioinputstream=AudioSystem.getAudioInputStream(file);
         } catch (UnsupportedAudioFileException | IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
+        /*
         
+        */
         AudioFormat format=audioinputstream.getFormat();
         int framelength=(int)audioinputstream.getFrameLength();
         int framesize=format.getFrameSize();
         byte[] bytes=new byte[framesize*framelength];
         int channel=format.getChannels();
-        int result=0;
+       
         try {
-            result=audioinputstream.read(bytes);
+            audioinputstream.read(bytes);
         } catch (IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(bytes.length+" "+format.getFrameRate()+" "+channel+" "+framesize+" "+framelength+" "+format.isBigEndian());
-
+        //System.out.println(bytes.length+" "+format.getFrameRate()+" "+channel+" "+framesize+" "+framelength+" "+format.isBigEndian());
         
 
+        
         int[][] sample=new int[channel][bytes.length/2/channel];
         for(int i=0;i<bytes.length;){
-         
-          for(int k=0;k<channel;k++){
-              sample[k][i/2/channel]=get16bitnum(bytes[i+1], bytes[i]);
-              if(i<bytes.length){
-              i+=channel;
-              }else{
-                break;
-              }
-          }
+            
+            for(int k=0;k<channel;k++){
+                sample[k][i/2/channel]=get16bitnum(bytes[i+1], bytes[i]);
+                if(i<bytes.length){
+                    i+=channel;
+                }else{
+                    break;
+                }
+            }
         }
-        System.out.println(sample[0].length);
-        swingcanvas canvas=new swingcanvas();
-
+        //System.out.println(sample[0].length);
+        final int step=80*60;
+        canvas=new swingcanvas(80,channel);
+        
+        try {
+            audioinputstream=AudioSystem.getAudioInputStream(file);
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{file=null;bytes=null;}
+        
         Clip speaker = (Clip)AudioSystem.getLine(new DataLine.Info(Clip.class,format));
         try {
-            speaker.open(out);
-            } catch (IOException ex) {
+            speaker.open(audioinputstream);
+        } catch (IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }finally{
+            audioinputstream=null;
+        }
         
-        for(int i=0;i<sample[0].length;){
+        int[][] paintarr=new int[channel][80];
+        Thread p=null;
+        Thread play=null;
+        for(int i=0;i<framelength;){
             final int index=i;
-            if(i+10000>sample[0].length){break;}
-            Thread play=new Thread(() -> {
-                speaker.setLoopPoints(index, index+10000);
+            if(i+step>sample[0].length){break;}
+            play=new Thread(() -> {
+                speaker.setLoopPoints(index, index+step);
                 speaker.loop(0);
-                while (speaker.getFramePosition()<index+10000){}
+                while (speaker.getFramePosition()<index+step){}
             });
-             play.start();
-            System.out.println("index :"+i);
-            int[] paintarr=new int[100];
-            for(int k=0;k<100;k++){
-                //System.out.print(sample[0][i]+" ");
-                int sum=0;
-                for(int j=0;j<100;j++){
-                    sum+=sample[0][i];
-                    i++;
+            play.start();
+            //System.out.println("index :"+i);
+            for(int ch=0;ch<channel;ch++){
+                for(int k=0;k<80;k++){
+                    //System.out.print(sample[0][i]+" ");
+                    int sum=0;
+                    for(int j=0;j<60;j++){
+                        sum+=sample[ch][i];
+                        i++;
+                    }
+                    sum/=60;
+                    paintarr[ch][k]=sum;
+                    //System.out.println(sum);
                 }
-                sum/=100;
-                paintarr[k]=sum;
-                //System.out.println(sum);
             }
-            Thread p=new Thread(() -> {canvas.update(paintarr);});
+            p=new Thread(() -> {canvas.update(paintarr);});
             p.start();
             try {
-            p.join();
-            play.join();    
+                p.join();
+                play.join();    
             } catch (InterruptedException ex) {
                 Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
         
-         System.out.println("done");
-         System.exit(0);
+        //System.out.println("done");
+        System.exit(0);
     }
 
     public static  int get16bitnum(byte high,byte low){

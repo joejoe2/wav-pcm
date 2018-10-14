@@ -16,20 +16,20 @@ import javafx.stage.Stage;
  *
  * @author 70136
  */
-public class audioclipobj extends Application{
-    MediaPlayer plonkSound2;
-    @Override
-    public void start(Stage stage) throws Exception {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\Will-282CD.wav");
-        plonkSound2 = new MediaPlayer(new Media(file.toURI().toString()));
-        plonkSound2.play();
-        
-    }
-    public static void main(String[] args) {
-        launch(args);
-        
-    }
+public class audioclipobj /*extends Application*/{
+//    MediaPlayer plonkSound2;
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\Will-282CD.wav");
+//        plonkSound2 = new MediaPlayer(new Media(file.toURI().toString()));
+//        plonkSound2.play();
+//        
+//    }
+//    public static void main(String[] args) {
+//        launch(args);
+//        
+//    }
 
     
     

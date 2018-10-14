@@ -15,39 +15,42 @@ import javax.swing.JFrame;
  */
 public class swingcanvas extends JComponent{
     JFrame frame;
-    int[] paintarr=new int[100];
+    int[][] paintarr;
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        
-        
+        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates. 
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g); //To change body of generated methods, choose Tools | Templates.
-        for(int i=0;i<99;i++){
-        int y1=paintarr[i]/100,y2=paintarr[i+1]/100;
+        for(int ch=0;ch<paintarr.length;ch++){
+          int d=ch==1?250:500;
+        for(int i=0;i<79;i++){
+        int y1=paintarr[ch][i]/100,y2=paintarr[ch][i+1]/100;
 
-        y1=(y1>=0)?250-y1:250+y1;
-        y2=(y2>=0)?250-y2:250+y2;
+        y1=(y1>=0)?d-y1:d+y1;
+        y2=(y2>=0)?d-y2:d+y2;
         
         g.drawLine(i*10, y1,(i+1)*10, y2);
+        }
         }
     }
     
     
     
-    public  void update(int[] arr){
+    public  void update(int[][] arr){
+       
        paintarr=arr;
        repaint();
        
     }
 
-    public swingcanvas() {
+    public swingcanvas(int len,int channel) {
+        paintarr=new int[channel][len];
         frame=new JFrame();
         frame.getContentPane().add(this);
-        frame.setSize(720, 560);
+        frame.setSize(800, 700);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
