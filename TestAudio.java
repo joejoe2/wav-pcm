@@ -106,10 +106,10 @@ public class TestAudio {
                 while (speaker.getFramePosition()<index+step){}
             });
             play.start();
-            //System.out.println("index :"+i);
+            try{
             for(int ch=0;ch<channel;ch++){
                 for(int k=0;k<80;k++){
-                    //System.out.print(sample[0][i]+" ");
+                    
                     int sum=0;
                     for(int j=0;j<60;j++){
                         sum+=sample[ch][i];
@@ -117,9 +117,12 @@ public class TestAudio {
                     }
                     sum/=60;
                     paintarr[ch][k]=sum;
-                    //System.out.println(sum);
+                    
                 }
             }
+              }catch(ArrayIndexOutOfBoundsException e){
+                 System.exit(0);
+              }
             p=new Thread(() -> {canvas.update(paintarr);});
             p.start();
             try {
