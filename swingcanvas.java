@@ -54,5 +54,12 @@ public class swingcanvas extends JComponent{
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    
+    public void end(){
+       frame.setVisible(false);
+       frame.dispose();
+       frame=null;
+       paintarr=null;
+    }
 
 }

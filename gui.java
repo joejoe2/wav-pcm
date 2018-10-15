@@ -5,6 +5,7 @@
  */
 package testaudio;
 
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -16,11 +17,12 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -52,7 +54,7 @@ public class gui extends JFrame implements DropTargetListener{
         t.start();
         this.setVisible(false);
         
-        //this.dispose();
+        
         
     }
 
@@ -73,8 +75,18 @@ public class gui extends JFrame implements DropTargetListener{
     }
 
     public gui() throws HeadlessException {
+        this.pack();
         this.setSize(800, 700);
+        this.setResizable(false);
+        
+        getContentPane().setLayout(null);
+        
+        JLabel label=new JLabel("please drag wav file here to start",JLabel.CENTER);
+        label.setBounds(150, 300, 500, 100);
+        this.add(label).setFont(new Font("", 1, 20));
+        
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK,this,true));
+        
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -85,9 +97,36 @@ public class gui extends JFrame implements DropTargetListener{
         } catch (LineUnavailableException ex) {
             Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        test=null;
+        file=null;
+        System.gc();
+        gui.this.setVisible(true);
+//        new gui();
+//        this.dispose();
+        
+        //gui.this.setVisible(true);
+//        Timer timer=new Timer();
+//        Thread th=new Thread(() -> {
+//            timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if(test.isend){
+//                    test=null;
+//                    start();
+//                    gui.this.setVisible(true);
+//                    timer.cancel();
+//                }
+//            }
+//        }, 5000,2000);
+//        });
+//        th.start();
     }
     public static void main(String[] args) {
-        gui g=new gui();
-
+        new gui();
     }
 }

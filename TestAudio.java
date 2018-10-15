@@ -24,6 +24,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class TestAudio {
     public swingcanvas canvas;
     File file;
+    boolean isend;
     /**
      * @param args the command line arguments
      */
@@ -78,6 +79,9 @@ public class TestAudio {
         canvas=new swingcanvas(80,channel);
         
         try {
+            
+            audioinputstream.close();
+            audioinputstream=null;
             audioinputstream=AudioSystem.getAudioInputStream(file);
         } catch (UnsupportedAudioFileException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,6 +95,11 @@ public class TestAudio {
         } catch (IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
+            try {
+                audioinputstream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
+            }
             audioinputstream=null;
         }
         
@@ -121,7 +130,9 @@ public class TestAudio {
                 }
             }
               }catch(ArrayIndexOutOfBoundsException e){
-                 System.exit(0);
+                 restart();
+                 sample=null;
+                 return;
               }
             p=new Thread(() -> {canvas.update(paintarr);});
             p.start();
@@ -135,7 +146,16 @@ public class TestAudio {
         }
         
         //System.out.println("done");
-        System.exit(0);
+        //System.exit(0);
+        restart();
+        sample=null;
+        canvas=null;
+        file=null;
+        p=null;
+        play=null;
+        //paintarr=null;
+        System.gc();
+        return;
     }
 
     public static  int get16bitnum(byte high,byte low){
@@ -146,6 +166,13 @@ public class TestAudio {
         h<<=8;
         num|=h;
         return num;
+    }
+    
+    public void restart(){
+        canvas.end();
+        canvas=null;
+        file=null;
+        System.gc();
     }
     
 }
