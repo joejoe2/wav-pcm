@@ -1,5 +1,10 @@
 # wav-pcm
 update 2018 10 16
+
+功能:讀取並分析音樂檔的訊號
+
+支援檔案格式:wav
+
 主要架構:
 
   1.由run.exe / run.jar呼叫testaudio.jar
