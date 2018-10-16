@@ -12,7 +12,7 @@ update 2018 10 16
 穩定版本: v0.92
 
 更新方式:
-         下載TestAudio.jar覆蓋原同名檔案即可
+         於本頁下載TestAudio.jar覆蓋原同名檔案即可
         
 完整檔案位置:   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
 
