@@ -1,4 +1,10 @@
 # wav-pcm
+update 2018 10 16
+主要架構:
+  1.由run.exe / run.jar呼叫testaudio.jar
+  2.執行程式主體(gui->testaudio->swingcanvas->gui)
+  3.測試記憶體占用 視情況重啟jvm
+  
 v0.1-成功讀取wav
 
 v0.9-支援拖曳wav檔 修正sample長度無法剛好取平均的問題
