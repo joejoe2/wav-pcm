@@ -48,12 +48,16 @@ public class swingcanvas extends JComponent{
     }
 
     public swingcanvas(int len,int channel) {
+        
         paintarr=new int[channel][2];
         frame=new JFrame();
         frame.getContentPane().add(this);
         frame.setSize(800, 700);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setAlwaysOnTop(true);
+        frame.toFront();
+        frame.setAlwaysOnTop(false);
     }
     
     public void end(){

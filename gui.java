@@ -89,6 +89,9 @@ public class gui extends JFrame implements DropTargetListener{
         
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gui.this.setAlwaysOnTop(true);
+        gui.this.toFront();
+        gui.this.setAlwaysOnTop(false);
         // System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
     }
     public void start(){
@@ -115,9 +118,10 @@ public class gui extends JFrame implements DropTargetListener{
         System.gc();
         System.gc();
         gui.this.setVisible(true);
-        
+        gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
-        if(Runtime.getRuntime().totalMemory()>=300*1000*1000){
+        gui.this.setAlwaysOnTop(false);
+        if(Runtime.getRuntime().totalMemory()>=324*1000*1000){
             try {
                 Runtime.getRuntime().exec("java -jar run.jar");
                 System.exit(0);
