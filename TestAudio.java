@@ -59,9 +59,7 @@ public class TestAudio {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         }
         //System.out.println(bytes.length+" "+format.getFrameRate()+" "+channel+" "+framesize+" "+framelength+" "+format.isBigEndian());
-        
 
-        
         int[][] sample=new int[channel][bytes.length/2/channel];
         for(int i=0;i<bytes.length;){
             
@@ -74,12 +72,8 @@ public class TestAudio {
                 }
             }
         }
-        //System.out.println(sample[0].length);
-        final int step=80*60;
-        canvas=new swingcanvas(80,channel);
-        
+
         try {
-            
             audioinputstream.close();
             audioinputstream=null;
             audioinputstream=AudioSystem.getAudioInputStream(file);
@@ -87,7 +81,7 @@ public class TestAudio {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{file=null;bytes=null;}
+        }finally{bytes=null;}
         
         Clip speaker = (Clip)AudioSystem.getLine(new DataLine.Info(Clip.class,format));
         try {
@@ -102,14 +96,22 @@ public class TestAudio {
             }
             audioinputstream=null;
         }
-        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
+        
+        final int step=80*60;
+        canvas=new swingcanvas(80,channel,file.getName(),speaker.getMicrosecondLength());
+        file=null;
+        
         System.gc();
         int[][] paintarr=new int[channel][80];
         Thread p=null;
         Thread play=null;
         for(int i=0;i<framelength;){
+            if(canvas.isstop()){break;}
             final int index=i;
             if(i+step>sample[0].length){break;}
+
+            canvas.settime(i*speaker.getMicrosecondLength()/framelength);
+            
             play=new Thread(() -> {
                 speaker.setLoopPoints(index, index+step);
                 speaker.loop(0);
@@ -147,16 +149,12 @@ public class TestAudio {
             play=null;
             System.gc();
         }
-        
-        //System.out.println("done");
-        //System.exit(0);
         restart();
         sample=null;
         canvas=null;
         file=null;
         p=null;
         play=null;
-        //paintarr=null;
         System.gc();
         return;
     }
@@ -170,12 +168,10 @@ public class TestAudio {
         num|=h;
         return num;
     }
-    
     public void restart(){
         canvas.end();
         canvas=null;
         file=null;
         System.gc();
     }
-    
 }

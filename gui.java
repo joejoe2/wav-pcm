@@ -53,9 +53,6 @@ public class gui extends JFrame implements DropTargetListener{
         });
         t.start();
         this.setVisible(false);
-        
-        
-        
     }
 
     @Override
@@ -92,13 +89,11 @@ public class gui extends JFrame implements DropTargetListener{
         gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
         gui.this.setAlwaysOnTop(false);
-        // System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
     }
     public void start(){
         System.gc();
         System.gc();
         System.gc();
-        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
         
        test=new TestAudio(file.getAbsoluteFile());
        
@@ -107,11 +102,6 @@ public class gui extends JFrame implements DropTargetListener{
         } catch (LineUnavailableException ex) {
             Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         test=null;
         file=null;
         System.gc();
@@ -129,30 +119,8 @@ public class gui extends JFrame implements DropTargetListener{
                 Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
-//        new gui();
-//        this.dispose();
-        
-        //gui.this.setVisible(true);
-//        Timer timer=new Timer();
-//        Thread th=new Thread(() -> {
-//            timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                if(test.isend){
-//                    test=null;
-//                    start();
-//                    gui.this.setVisible(true);
-//                    timer.cancel();
-//                }
-//            }
-//        }, 5000,2000);
-//        });
-//        th.start();
     }
     public static void main(String[] args) {
-        
         new gui();
-        
     }
 }
