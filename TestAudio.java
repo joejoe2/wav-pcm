@@ -107,6 +107,7 @@ public class TestAudio {
         Thread play=null;
         for(int i=0;i<framelength;){
             if(canvas.isstop()){break;}
+            
             final int index=i;
             if(i+step>sample[0].length){break;}
 
@@ -150,6 +151,8 @@ public class TestAudio {
             System.gc();
         }
         restart();
+        speaker.stop();
+        //speaker.close();
         sample=null;
         canvas=null;
         file=null;

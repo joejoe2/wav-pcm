@@ -29,6 +29,7 @@ public class swingcanvas extends JComponent{
     int second;
     int min;
     boolean isterminated;
+    int opt=0;
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates. 
@@ -45,7 +46,11 @@ public class swingcanvas extends JComponent{
         y1=(y1>=0)?d-y1:d+y1;
         y2=(y2>=0)?d-y2:d+y2;
         
-        g.drawLine(i*10, y1,(i+1)*10, y2);
+        if(opt==0){
+        g.drawLine(i*10, y1,(i+1)*10, y2);}
+        else{
+        g.drawLine(i*10, y1,(i+1)*10, y1);
+        g.drawLine((i+1)*10, y1,(i+1)*10, y2);}
         }
         }
     }
@@ -78,11 +83,25 @@ public class swingcanvas extends JComponent{
         tlabel.setLocation(0, 25);
         tlabel.setSize(800,25);
         JButton terminbtn=new JButton("terminate");
+        JButton optbtn=new JButton("change to discrete wave");
+        optbtn.addActionListener((ActionEvent e) -> {
+                  if(opt==0){
+                  optbtn.setText("change to curve wave");
+                  opt=1;
+                  }else{
+                  optbtn.setText("change to discrete wave");
+                  opt=0;
+                  }
+        });
         terminbtn.addActionListener((ActionEvent e) -> {isterminated=true;});
         frame.add(terminbtn);
+        frame.add(optbtn);
         terminbtn.setLocation(0, 50);
         terminbtn.setSize(100,50);
+        optbtn.setLocation(120, 50);
+        optbtn.setSize(200,50);
         frame.setSize(800, 700);
+        frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setAlwaysOnTop(true);
