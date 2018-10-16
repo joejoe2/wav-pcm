@@ -14,7 +14,7 @@ update 2018 10 16
 更新方式:
          於本頁下載TestAudio.jar覆蓋原同名檔案即可
         
-完整檔案位置:   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
+完整檔案位置(v0.92):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
 
 --------------------------------------------------------------------------------------------------------------------------------------
 v0.1-成功讀取wav
