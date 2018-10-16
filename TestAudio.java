@@ -102,7 +102,8 @@ public class TestAudio {
             }
             audioinputstream=null;
         }
-        
+        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
+        System.gc();
         int[][] paintarr=new int[channel][80];
         Thread p=null;
         Thread play=null;
@@ -142,7 +143,9 @@ public class TestAudio {
             } catch (InterruptedException ex) {
                 Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+            p=null;
+            play=null;
+            System.gc();
         }
         
         //System.out.println("done");

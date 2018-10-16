@@ -26,7 +26,7 @@ public class swingcanvas extends JComponent{
         super.paint(g); //To change body of generated methods, choose Tools | Templates.
         for(int ch=0;ch<paintarr.length;ch++){
           int d=ch==1?250:500;
-        for(int i=0;i<79;i++){
+        for(int i=0;i<paintarr[ch].length-1;i++){
         int y1=paintarr[ch][i]/100,y2=paintarr[ch][i+1]/100;
 
         y1=(y1>=0)?d-y1:d+y1;
@@ -35,6 +35,7 @@ public class swingcanvas extends JComponent{
         g.drawLine(i*10, y1,(i+1)*10, y2);
         }
         }
+        paintarr=null;
     }
     
     
@@ -47,7 +48,7 @@ public class swingcanvas extends JComponent{
     }
 
     public swingcanvas(int len,int channel) {
-        paintarr=new int[channel][len];
+        paintarr=new int[channel][2];
         frame=new JFrame();
         frame.getContentPane().add(this);
         frame.setSize(800, 700);
@@ -56,7 +57,7 @@ public class swingcanvas extends JComponent{
     }
     
     public void end(){
-       frame.setVisible(false);
+       //frame.setVisible(false);
        frame.dispose();
        frame=null;
        paintarr=null;

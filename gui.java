@@ -85,13 +85,20 @@ public class gui extends JFrame implements DropTargetListener{
         label.setBounds(150, 300, 500, 100);
         this.add(label).setFont(new Font("", 1, 20));
         
-        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK,this,true));
+        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_NONE,this,true));
         
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
     }
     public void start(){
+        System.gc();
+        System.gc();
+        System.gc();
+        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
+        
        test=new TestAudio(file.getAbsoluteFile());
+       
         try {
             test.main();
         } catch (LineUnavailableException ex) {
@@ -105,7 +112,20 @@ public class gui extends JFrame implements DropTargetListener{
         test=null;
         file=null;
         System.gc();
+        System.gc();
+        System.gc();
         gui.this.setVisible(true);
+        
+        gui.this.toFront();
+        if(Runtime.getRuntime().totalMemory()>=300*1000*1000){
+            try {
+                Runtime.getRuntime().exec("java -jar run.jar");
+                System.exit(0);
+            } catch (IOException ex) {
+                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //System.out.println("max:"+Runtime.getRuntime().maxMemory()+"free:"+Runtime.getRuntime().freeMemory()+"total:"+Runtime.getRuntime().totalMemory());
 //        new gui();
 //        this.dispose();
         
@@ -127,6 +147,8 @@ public class gui extends JFrame implements DropTargetListener{
 //        th.start();
     }
     public static void main(String[] args) {
+        
         new gui();
+        
     }
 }
