@@ -5,8 +5,10 @@
  */
 package testaudio;
 
+import java.awt.AWTException;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Robot;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -15,6 +17,9 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -32,8 +37,10 @@ import javax.swing.JLabel;
 public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
+    boolean holding;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
+        if(holding){return;}
         Object o=null;
         file=null;
         try {
@@ -54,6 +61,11 @@ public class gui extends JFrame implements DropTargetListener{
         });
         t.start();
         this.setVisible(false);
+        try {
+            new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        } catch (AWTException ex) {
+            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -90,8 +102,10 @@ public class gui extends JFrame implements DropTargetListener{
         gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
         gui.this.setAlwaysOnTop(false);
+        
     }
     public void start(){
+        holding=false;
         System.gc();
         System.gc();
         System.gc();
