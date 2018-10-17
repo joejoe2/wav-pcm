@@ -37,22 +37,21 @@ public class TestAudio {
     public  void main() throws LineUnavailableException {
         //File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\33_Sparkling Daydream (Movie size).wav");
         AudioInputStream audioinputstream=null;
-        
         try {
-            audioinputstream=AudioSystem.getAudioInputStream(file);
-        } catch (UnsupportedAudioFileException | IOException ex) {
+            audioinputstream = AudioSystem.getAudioInputStream(file);
+        } catch (UnsupportedAudioFileException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+        } catch (IOException ex) {
+            Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*
-        
-        */
         AudioFormat format=audioinputstream.getFormat();
         int framelength=(int)audioinputstream.getFrameLength();
         int framesize=format.getFrameSize();
         byte[] bytes=new byte[framesize*framelength];
+        
+        
         int channel=format.getChannels();
-       
+        
         try {
             audioinputstream.read(bytes);
         } catch (IOException ex) {

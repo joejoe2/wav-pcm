@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -78,11 +79,11 @@ public class gui extends JFrame implements DropTargetListener{
         
         getContentPane().setLayout(null);
         
-        JLabel label=new JLabel("please drag wav file here to start",JLabel.CENTER);
+        JLabel label=new JLabel("please drag wav or mp3 file here to start",JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
         this.add(label).setFont(new Font("", 1, 20));
         
-        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_NONE,this,true));
+        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK,this,true));
         
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,7 +95,17 @@ public class gui extends JFrame implements DropTargetListener{
         System.gc();
         System.gc();
         System.gc();
-        
+       if(".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))){
+            try {
+                file=convert.mp3ToWav(file.getAbsoluteFile());
+            } catch (UnsupportedAudioFileException ex) {
+                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            file.deleteOnExit();
+       }
+       
        test=new TestAudio(file.getAbsoluteFile());
        
         try {
@@ -111,7 +122,7 @@ public class gui extends JFrame implements DropTargetListener{
         gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
         gui.this.setAlwaysOnTop(false);
-        if(Runtime.getRuntime().totalMemory()>=324*1000*1000){
+        if(Runtime.getRuntime().totalMemory()>=300*1000*1000){
             try {
                 Runtime.getRuntime().exec("java -jar run.jar");
                 System.exit(0);
