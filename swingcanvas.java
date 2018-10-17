@@ -67,7 +67,7 @@ public class swingcanvas extends JComponent{
         min=(int)microsec/60;
         second=(int)microsec-60*min;
         tlabel=new JLabel("00:00 / "+String.format("%02d:%02d",min,second));
-        nlabel=new JLabel("now playing: "+name.substring(0, name.lastIndexOf(".")));
+        nlabel=new JLabel("now playing: "+name);
         frame.setLayout(null); 
         frame.getContentPane().add(this);
         this.setLocation(0, 100);

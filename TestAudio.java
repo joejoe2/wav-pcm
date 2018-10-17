@@ -97,7 +97,7 @@ public class TestAudio {
         }
         
         final int step=80*60;
-        canvas=new swingcanvas(80,channel,file.getName(),speaker.getMicrosecondLength());
+        canvas=new swingcanvas(80,channel,file.getName().replaceAll(".wav", ""),speaker.getMicrosecondLength());
         file=null;
         
         System.gc();
