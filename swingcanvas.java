@@ -5,17 +5,13 @@
  */
 package testaudio;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.plaf.ButtonUI;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 /**
  *
@@ -71,7 +67,7 @@ public class swingcanvas extends JComponent{
         min=(int)microsec/60;
         second=(int)microsec-60*min;
         tlabel=new JLabel("00:00 / "+String.format("%02d:%02d",min,second));
-        nlabel=new JLabel("now playing: "+name);
+        nlabel=new JLabel("now playing: "+name.substring(0, name.lastIndexOf(".")));
         frame.setLayout(null); 
         frame.getContentPane().add(this);
         this.setLocation(0, 100);

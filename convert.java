@@ -37,7 +37,7 @@ public class convert {
     // create stream that delivers the desired format
     AudioInputStream converted = AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
     // write stream into a file with file format wav
-    File f=new File("temp.wav");
+    File f=new File(mp3Data.getName().substring(0, mp3Data.getName().lastIndexOf(".")));
     AudioSystem.write(converted, Type.WAVE, f);
     return f.getAbsoluteFile();
 }
