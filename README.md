@@ -44,4 +44,4 @@ v0.94-支援mp3格式、下調記憶體限制至300mb   由於舊式java sound a
 
 v0.95-修正暫存檔的刪除流程 修正拖曳處理
 
-v0.97-正在測試頻率分析的正確性.........
+v0.97-正在測試頻率分析的正確性.........(https://drive.google.com/file/d/1lg8FuFd7MnIFTf8xJVFyTpRbCzKjgQLF/view?usp=sharing)
