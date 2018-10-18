@@ -37,10 +37,9 @@ import javax.swing.JLabel;
 public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
-    boolean holding;
+    private boolean requireddel;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
-        if(holding){return;}
         Object o=null;
         file=null;
         try {
@@ -53,6 +52,11 @@ public class gui extends JFrame implements DropTargetListener{
         } catch (IOException ex) {
             Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        } catch (AWTException ex) {
+            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+        } 
         //System.out.println(file.getAbsoluteFile());
         Thread t=new Thread(() -> {
            if(file!=null){
@@ -60,12 +64,8 @@ public class gui extends JFrame implements DropTargetListener{
         }
         });
         t.start();
-        this.setVisible(false);
-        try {
-            new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        } catch (AWTException ex) {
-            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        
     }
 
     @Override
@@ -105,7 +105,7 @@ public class gui extends JFrame implements DropTargetListener{
         
     }
     public void start(){
-        holding=false;
+        this.setVisible(false);
         System.gc();
         System.gc();
         System.gc();
@@ -118,6 +118,9 @@ public class gui extends JFrame implements DropTargetListener{
                 Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
             }
             file.deleteOnExit();
+            requireddel=true;
+       }else{
+           requireddel=false;
        }
        
        test=new TestAudio(file.getAbsoluteFile());
@@ -128,6 +131,10 @@ public class gui extends JFrame implements DropTargetListener{
             Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
         }
         test=null;
+        if(requireddel){
+           file.delete();
+           requireddel=false;
+        }
         file=null;
         System.gc();
         System.gc();
