@@ -39,9 +39,26 @@ public class gui extends JFrame implements DropTargetListener{
     File file;
     private boolean requireddel;
     @Override
-    public void dragEnter(DropTargetDragEvent dtde) {
+    public void dragEnter(DropTargetDragEvent dtde) {        
+    }
+
+    @Override
+    public void dragOver(DropTargetDragEvent dtde) {
+    }
+
+    @Override
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+    }
+
+    @Override
+    public void dragExit(DropTargetEvent dte) {
+    }
+
+    @Override
+    public void drop(DropTargetDropEvent dtde) {
         Object o=null;
         file=null;
+        dtde.acceptDrop(DnDConstants.ACTION_LINK);
         try {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             o=dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
@@ -64,24 +81,6 @@ public class gui extends JFrame implements DropTargetListener{
         }
         });
         t.start();
-        
-        
-    }
-
-    @Override
-    public void dragOver(DropTargetDragEvent dtde) {
-    }
-
-    @Override
-    public void dropActionChanged(DropTargetDragEvent dtde) {
-    }
-
-    @Override
-    public void dragExit(DropTargetEvent dte) {
-    }
-
-    @Override
-    public void drop(DropTargetDropEvent dtde) {
     }
 
     public gui() throws HeadlessException {
