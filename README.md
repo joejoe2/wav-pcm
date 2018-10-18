@@ -1,5 +1,5 @@
 # wav-pcm
-update 2018 10 17
+update 2018 10 18
 
 功能:讀取並分析音樂檔的訊號
 
@@ -14,12 +14,12 @@ update 2018 10 17
   3.測試記憶體占用 視情況重啟jvm
 
 
-穩定版本: v0.94
+穩定版本: v0.95
 
 更新方式:
          於本頁下載TestAudio.jar覆蓋原同名檔案即可(  以及lib資料夾!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  )
         
-完整檔案位置(v0.94):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
+完整檔案位置(v0.95):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
 
 --------------------------------------------------------------------------------------------------------------------------------------
 v0.1-成功讀取wav
@@ -32,4 +32,5 @@ v0.92-適度修正大檔案的內存疊加 當回到選擇畫面時記憶體>324
 
 v0.94-支援mp3格式、下調記憶體限制至300mb   由於舊式java sound api無法讀取mp3且新式java fx可讀但無法進行frame level的操作 故改以jlayer把mp3轉成temp.wav再進行讀取(當程式結束會自動刪除)
 
-待修正：暫存檔的刪除流程有誤
+v0.95-修正暫存檔的刪除流程
+
