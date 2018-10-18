@@ -29,7 +29,7 @@ library:mp3spi
 
 完整檔案位置(v0.95):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
 
-若要使用裝置本身的jre請點擊run.jar啟動
+若要使用裝置本身的jre請點擊run.jar啟動(可刪除jre資料夾)
 
 --------------------------------------------------------------------------------------------------------------------------------------
 v0.1-成功讀取wav
