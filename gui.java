@@ -6,6 +6,7 @@
 package testaudio;
 
 import java.awt.AWTException;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Robot;
@@ -17,16 +18,22 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,6 +43,7 @@ public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
     private boolean requireddel;
+    static final float version=0.98f;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {        
     }
@@ -58,7 +66,6 @@ public class gui extends JFrame implements DropTargetListener{
         file=null;
         dtde.acceptDrop(DnDConstants.ACTION_LINK);
         try {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             o=dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
             List<File> l=(List<File>)(o);
             file=l.get(0);
@@ -72,7 +79,6 @@ public class gui extends JFrame implements DropTargetListener{
         } catch (AWTException ex) {
             Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        //System.out.println(file.getAbsoluteFile());
         Thread t=new Thread(() -> {
            if(file!=null){
            start();
@@ -87,7 +93,24 @@ public class gui extends JFrame implements DropTargetListener{
         this.setResizable(false);
         
         getContentPane().setLayout(null);
-        
+        JButton check=new JButton("check update");
+        check.addActionListener((ActionEvent e) -> {
+            String ver=updatecheck.getver();
+            if(ver==null){JOptionPane.showMessageDialog(this, "network error!");}
+            else if (version < Float.parseFloat(ver)) {
+                JOptionPane.showMessageDialog(this, "                you have a new version of the application\nplease check <https://github.com/joejoe2/wav-pcm> for update");
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm"));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{JOptionPane.showMessageDialog(this, "you are latest now!");}
+        });
+        check.setLocation(150, 0);
+        check.setSize(500, 50);
+        this.add(check);
         JLabel label=new JLabel("please drag wav or mp3 file here to start",JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
         this.add(label).setFont(new Font("", 1, 20));
@@ -150,6 +173,6 @@ public class gui extends JFrame implements DropTargetListener{
         }
     }
     public static void main(String[] args) {
-        new gui();
+         new gui();
     }
 }
