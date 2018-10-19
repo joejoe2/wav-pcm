@@ -114,7 +114,10 @@ public class gui extends JFrame implements DropTargetListener{
         JLabel label=new JLabel("please drag wav or mp3 file here to start",JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
         this.add(label).setFont(new Font("", 1, 20));
-        
+        JLabel vlabel=new JLabel("version:"+version,JLabel.CENTER);
+        vlabel.setLocation(0, 0);
+        vlabel.setSize(100,25);
+        this.add(vlabel).setFont(new Font("", 1, 15));
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK,this,true));
         
         this.setVisible(true);
