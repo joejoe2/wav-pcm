@@ -8,10 +8,12 @@ package testaudio;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.border.BevelBorder;
 
 /**
  *
@@ -37,31 +39,47 @@ public class swingcanvas extends JComponent{
         for(int ch=0;ch<paintarr.length;ch++){
           int d=ch==1?250:500;
         for(int i=0;i<paintarr[ch].length-1;i++){
-        int y1=paintarr[ch][i]/100,y2=paintarr[ch][i+1]/100;
+        int y1=paintarr[ch][i]/125,y2=paintarr[ch][i+1]/125;
 
         y1=(y1>=0)?d-y1:d+y1;
         y2=(y2>=0)?d-y2:d+y2;
         
         if(opt==0){
-        g.drawLine(i*10, y1,(i+1)*10, y2);}
+        g.drawLine(i*6, y1,(i+1)*6, y2);}
         else{
-        g.drawLine(i*10, y1,(i+1)*10, y1);
-        g.drawLine((i+1)*10, y1,(i+1)*10, y2);}
+        g.drawLine(i*6, y1,(i+1)*6, y1);
+        g.drawLine((i+1)*6, y1,(i+1)*6, y2);}
         }
         }
+        int d=1500;
+        double[][] freq=new double[paintarr.length][paintarr[0].length];
+        for(int ch=0;ch<paintarr.length;ch++){
+            freq[ch]=Arrays.stream(paintarr[ch]).mapToDouble(dd->{return dd/d>=140?(dd-d*140)/2+d*40:dd/d>=80?dd-d*40:dd/d>=40?dd-d*15:dd/d>=25?dd-d*5:dd;}).toArray();
+            freq[ch]=caculatefft.getMagnitudes(freq[ch]);
+                  g.drawLine(832+50,275*(ch+1), 832+50+freq[ch].length*15,275*(ch+1) );
+              for(int i=0;i<freq[ch].length-1;i++){
+                  int y1=275*(ch+1)-(int)freq[ch][i]/d;
+                  int y2=275*(ch+1)-(int)freq[ch][i+1]/d;
+                  g.drawLine((i)*15+832+50, y1,(i)*15+832+50,275*(ch+1));
+                  g.drawLine((i)*15+832+50, y1,(i+1)*15+832+50,y1);
+                  g.drawLine((i+1)*15+832+50, y1,(i+1)*15+832+50,y2);
+                  g.drawLine((i+1)*15+832+50, y1,(i+1)*15+832+50,275*(ch+1));
+              }
+                  g.drawLine((freq[ch].length-1)*15+832+50, 275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15+832+50,275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d );
+                  g.drawLine((freq[ch].length)*15+832+50, 275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15+832+50, 275*(ch+1));
+        }
+        
     }
     
     
     
     public  void update(int[][] arr){
-       
        paintarr=arr;
        repaint();
-       
     }
 
     public swingcanvas(int len,int channel,String name,long microsec) {
-        paintarr=new int[channel][2];
+        paintarr=new int[channel][128];
         frame=new JFrame();
         microsec/=1000000;
         min=(int)microsec/60;
@@ -70,8 +88,9 @@ public class swingcanvas extends JComponent{
         nlabel=new JLabel("now playing: "+name);
         frame.setLayout(null); 
         frame.getContentPane().add(this);
-        this.setLocation(0, 100);
-        this.setSize(800,600);
+        this.setLocation(0, 125);
+        this.setSize(800+50+16*15*2+50,600);
+        this.setBorder(new BevelBorder(1));
         frame.getContentPane().add(nlabel).setFont(new Font("", 1, 20));
         nlabel.setLocation(0,0);
         nlabel.setSize(800,25);
@@ -96,7 +115,15 @@ public class swingcanvas extends JComponent{
         terminbtn.setSize(100,50);
         optbtn.setLocation(120, 50);
         optbtn.setSize(200,50);
-        frame.setSize(800, 700);
+        JLabel plabel=new JLabel("pcm wave");
+        frame.add(plabel).setFont(new Font("", 1, 20));
+        plabel.setSize(200,25);
+        plabel.setLocation(this.getWidth()/5,100);
+        JLabel flabel=new JLabel("frequency");
+        frame.add(flabel).setFont(new Font("", 1, 20));
+        flabel.setSize(200,25);
+        flabel.setLocation(this.getWidth()/4*3,100);
+        frame.setSize(832+50+16*15*2+100, 800);
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

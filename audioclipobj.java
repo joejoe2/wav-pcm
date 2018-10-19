@@ -5,6 +5,7 @@
  */
 package testaudio;
 
+import com.sun.media.sound.FFT;
 import java.applet.AudioClip;
 import java.io.File;
 import javafx.application.Application;
@@ -30,7 +31,6 @@ public class audioclipobj /*extends Application*/{
 //        launch(args);
 //        
 //    }
-
     
     
 }
