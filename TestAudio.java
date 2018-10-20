@@ -34,7 +34,7 @@ public class TestAudio {
     }
 
     
-    public  void main() throws LineUnavailableException {
+    public  void main() throws Exception {
         //File file=new File("D:\\documents\\NetBeansProjects\\TestAudio\\src\\testaudio\\33_Sparkling Daydream (Movie size).wav");
         AudioInputStream audioinputstream=null;
         try {
@@ -96,12 +96,12 @@ public class TestAudio {
             audioinputstream=null;
         }
         
-        final int step=128*25;
+        final int step=128*2*12;
         canvas=new swingcanvas(128,channel,file.getName().replaceAll(".wav", ""),speaker.getMicrosecondLength());
         file=null;
         
         System.gc();
-        int[][] paintarr=new int[channel][128];
+        int[][] paintarr=new int[channel][128*2];
         Thread p=null;
         Thread play=null;
         for(int i=0;i<framelength;){
@@ -119,14 +119,14 @@ public class TestAudio {
             });
             try{
             for(int ch=0;ch<channel;ch++){
-                for(int k=0;k<128;k++){
+                for(int k=0;k<128*2;k++){
                     
                     int sum=0;
-                    for(int j=0;j<25;j++){
+                    for(int j=0;j<12;j++){
                         sum+=sample[ch][i];
                         i++;
                     }
-                    sum/=25;
+                    sum/=12;
                     paintarr[ch][k]=sum;
                     
                 }

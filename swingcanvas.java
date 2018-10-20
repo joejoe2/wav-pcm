@@ -39,34 +39,35 @@ public class swingcanvas extends JComponent{
         for(int ch=0;ch<paintarr.length;ch++){
           int d=ch==1?200:450;
         for(int i=0;i<paintarr[ch].length-1;i++){
-        int y1=paintarr[ch][i]/150,y2=paintarr[ch][i+1]/150;
+        int y1=paintarr[ch][i]/250,y2=paintarr[ch][i+1]/250;
 
         y1=(y1>=0)?d-y1:d-y1;
         y2=(y2>=0)?d-y2:d-y2;
         
         if(opt==0){
-        g.drawLine(i*6, y1,(i+1)*6, y2);}
+        g.drawLine(i*3, y1,(i+1)*3, y2);}
         else{
-        g.drawLine(i*6, y1,(i+1)*6, y1);
-        g.drawLine((i+1)*6, y1,(i+1)*6, y2);}
+        g.drawLine(i*3, y1,(i+1)*3, y1);
+        g.drawLine((i+1)*3, y1,(i+1)*3, y2);}
         }
         }
-        int d=1500;
+        int d=1000;
         double[][] freq=new double[paintarr.length][paintarr[0].length];
         for(int ch=0;ch<paintarr.length;ch++){
-            freq[ch]=Arrays.stream(paintarr[ch]).mapToDouble(dd->{return dd/d>=140?(dd-d*140)/2+d*40:dd/d>=80?dd-d*40:dd/d>=40?dd-d*15:dd/d>=25?dd-d*5:dd;}).toArray();
+            freq[ch]=Arrays.stream(paintarr[ch]).mapToDouble(dd->{return dd;}).toArray();
             freq[ch]=caculatefft.getMagnitudes(freq[ch]);
-                  g.drawLine(832+50,275*(ch+1), 832+50+freq[ch].length*15,275*(ch+1) );
+            freq[ch]=Arrays.stream(freq[ch]).map(dd->{return dd/d>=140?(dd-d*140)/4+d*40:dd/d>=80?dd-d*40:dd/d>=40?dd-d*15:dd/d>=25?dd-d*5:dd;}).toArray();
+                  g.drawLine(832+50,250*(ch+1), 832+50+freq[ch].length*15/2,250*(ch+1) );
               for(int i=0;i<freq[ch].length-1;i++){
-                  int y1=275*(ch+1)-(int)freq[ch][i]/d;
-                  int y2=275*(ch+1)-(int)freq[ch][i+1]/d;
-                  g.drawLine((i)*15+832+50, y1,(i)*15+832+50,275*(ch+1));
-                  g.drawLine((i)*15+832+50, y1,(i+1)*15+832+50,y1);
-                  g.drawLine((i+1)*15+832+50, y1,(i+1)*15+832+50,y2);
-                  g.drawLine((i+1)*15+832+50, y1,(i+1)*15+832+50,275*(ch+1));
+                  int y1=250*(ch+1)-(int)freq[ch][i]/d;
+                  int y2=250*(ch+1)-(int)freq[ch][i+1]/d;
+                  g.drawLine((i)*15/2+832+50, y1,(i)*15/2+832+50,250*(ch+1));
+                  g.drawLine((i)*15/2+832+50, y1,(i+1)*15/2+832+50,y1);
+                  g.drawLine((i+1)*15/2+832+50, y1,(i+1)*15/2+832+50,y2);
+                  g.drawLine((i+1)*15/2+832+50, y1,(i+1)*15/2+832+50,250*(ch+1));
               }
-                  g.drawLine((freq[ch].length-1)*15+832+50, 275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15+832+50,275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d );
-                  g.drawLine((freq[ch].length)*15+832+50, 275*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15+832+50, 275*(ch+1));
+                  g.drawLine((freq[ch].length-1)*15/2+832+50, 250*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15/2+832+50,250*(ch+1)-(int)freq[ch][freq[ch].length-1]/d );
+                  g.drawLine((freq[ch].length)*15/2+832+50, 250*(ch+1)-(int)freq[ch][freq[ch].length-1]/d, (freq[ch].length)*15/2+832+50, 250*(ch+1));
         }
         
     }
@@ -79,7 +80,7 @@ public class swingcanvas extends JComponent{
     }
 
     public swingcanvas(int len,int channel,String name,long microsec) {
-        paintarr=new int[channel][128];
+        paintarr=new int[channel][128*2];
         frame=new JFrame();
         microsec/=1000000;
         min=(int)microsec/60;

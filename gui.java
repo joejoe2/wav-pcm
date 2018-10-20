@@ -19,7 +19,6 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -43,7 +41,7 @@ public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version=0.985f;
+    static final float version=0.99f;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {        
     }
@@ -150,8 +148,8 @@ public class gui extends JFrame implements DropTargetListener{
        
         try {
             test.main();
-        } catch (LineUnavailableException ex) {
-            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "can not surpport "+file.getName().substring(file.getName().lastIndexOf("."))+" file!"+"\nonly surpport .wav or .mp3 now!");
         }
         test=null;
         if(requireddel){
