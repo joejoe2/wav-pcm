@@ -43,7 +43,7 @@ public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version=0.98f;
+    static final float version=0.985f;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {        
     }

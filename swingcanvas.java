@@ -37,12 +37,12 @@ public class swingcanvas extends JComponent{
     public void paint(Graphics g) {
         super.paint(g); //To change body of generated methods, choose Tools | Templates.
         for(int ch=0;ch<paintarr.length;ch++){
-          int d=ch==1?250:500;
+          int d=ch==1?200:450;
         for(int i=0;i<paintarr[ch].length-1;i++){
-        int y1=paintarr[ch][i]/125,y2=paintarr[ch][i+1]/125;
+        int y1=paintarr[ch][i]/150,y2=paintarr[ch][i+1]/150;
 
-        y1=(y1>=0)?d-y1:d+y1;
-        y2=(y2>=0)?d-y2:d+y2;
+        y1=(y1>=0)?d-y1:d-y1;
+        y2=(y2>=0)?d-y2:d-y2;
         
         if(opt==0){
         g.drawLine(i*6, y1,(i+1)*6, y2);}
