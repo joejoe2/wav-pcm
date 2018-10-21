@@ -23,7 +23,6 @@ import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +40,7 @@ public class gui extends JFrame implements DropTargetListener{
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version=0.99f;
+    static final float version=0.995f;
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {        
     }
@@ -97,12 +96,17 @@ public class gui extends JFrame implements DropTargetListener{
             if(ver==null){JOptionPane.showMessageDialog(this, "network error!");}
             else if (version < Float.parseFloat(ver)) {
                 JOptionPane.showMessageDialog(this, "                you have a new version of the application\nplease check <https://github.com/joejoe2/wav-pcm> for update");
+                int opt=JOptionPane.showConfirmDialog(this,"do you want to download automatically?","update check", JOptionPane.YES_NO_OPTION);
                 try {
-                    Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm"));
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+                if(opt==JOptionPane.YES_OPTION){
+                    Downloadtest.autoupdate();
+                    restart();
+                }
+                else{
+                  Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm"));
+                }
+                }catch(Exception ex){
+                   JOptionPane.showMessageDialog(this, "network error!");
                 }
             }else{JOptionPane.showMessageDialog(this, "you are latest now!");}
         });
@@ -166,8 +170,7 @@ public class gui extends JFrame implements DropTargetListener{
         gui.this.setAlwaysOnTop(false);
         if(Runtime.getRuntime().totalMemory()>=300*1000*1000){
             try {
-                Runtime.getRuntime().exec("java -jar run.jar");
-                System.exit(0);
+                restart();
             } catch (IOException ex) {
                 Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -175,5 +178,9 @@ public class gui extends JFrame implements DropTargetListener{
     }
     public static void main(String[] args) {
          new gui();
+    }
+    public static void restart() throws IOException{
+         Runtime.getRuntime().exec("java -jar run.jar");
+         System.exit(0);
     }
 }
