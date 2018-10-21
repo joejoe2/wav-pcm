@@ -30,6 +30,8 @@ public class Downloadtest {
             while((l=buf.read(bytes))!=-1){
                fout.write(bytes,0, l);
             }
+            buf.close();
+            fout.close();
     }
     
 }
