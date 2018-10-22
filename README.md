@@ -1,5 +1,5 @@
 # wav-pcm
-update 2018 10 21
+update 2018 10 22
 
 功能:讀取並分析音樂檔的訊號(波形、頻率)
 
@@ -14,7 +14,7 @@ update 2018 10 21
   3.測試記憶體占用 視情況重啟jvm
 
 
-穩定版本: v0.995
+穩定版本: v1.0
 
 JDK版本:1.8.0_181
 
@@ -27,7 +27,7 @@ library:mp3spi
 
 初次使用請至google drive下載完整版
 
-完整檔案位置(v0.995):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
+完整檔案位置(v1.0):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
 
 若要使用裝置本身的jre請點擊run.jar啟動(可刪除jre資料夾)
 
@@ -53,3 +53,5 @@ v0.985-修正波形參數
 v0.99-調整參數提升精細度
 
 v0.995-新增自動下載更新功能
+
+v1.0-正式版發佈
