@@ -5,6 +5,8 @@ update 2018 10 22
 
 支援檔案格式:wav、mp3
 
+使用教學： https://drive.google.com/file/d/1f719ojSC7xMivi9zPOtVpM3JMCUita1G/view?usp=drivesdk
+
 主要架構:
 
   1.由run.exe / run.jar呼叫testaudio.jar
