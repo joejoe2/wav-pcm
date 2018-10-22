@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author 70136
  */
-public class audioclipobj /*extends Application*/{
+public class audioclipobj /*extends Application*/ {
 //    MediaPlayer plonkSound2;
 //    @Override
 //    public void start(Stage stage) throws Exception {
@@ -31,6 +31,5 @@ public class audioclipobj /*extends Application*/{
 //        launch(args);
 //        
 //    }
-    
-    
+
 }

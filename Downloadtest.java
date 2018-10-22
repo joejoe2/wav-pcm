@@ -19,19 +19,19 @@ public class Downloadtest {
     /**
      * @param args the command line arguments
      */
-    public static void autoupdate() throws Exception{
-            // TODO code application logic here
-            URL link=new URL("https://github.com/joejoe2/wav-pcm/raw/master/TestAudio.jar");
-            HttpURLConnection con=(HttpURLConnection)link.openConnection();
-            BufferedInputStream buf=new BufferedInputStream(con.getInputStream());
-            FileOutputStream fout=new FileOutputStream("TestAudio.jar");
-            int l=0;
-            byte[] bytes=new byte[4096];
-            while((l=buf.read(bytes))!=-1){
-               fout.write(bytes,0, l);
-            }
-            buf.close();
-            fout.close();
+    public static void autoupdate() throws Exception {
+        // TODO code application logic here
+        URL link = new URL("https://github.com/joejoe2/wav-pcm/raw/master/TestAudio.jar");
+        HttpURLConnection con = (HttpURLConnection) link.openConnection();
+        BufferedInputStream buf = new BufferedInputStream(con.getInputStream());
+        FileOutputStream fout = new FileOutputStream("TestAudio.jar");
+        int l = 0;
+        byte[] bytes = new byte[4096];
+        while ((l = buf.read(bytes)) != -1) {
+            fout.write(bytes, 0, l);
+        }
+        buf.close();
+        fout.close();
     }
-    
+
 }
