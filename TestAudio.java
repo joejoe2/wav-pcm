@@ -5,6 +5,8 @@
  */
 package testaudio;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -15,6 +17,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JSlider;
 
 /**
  *
@@ -25,11 +28,11 @@ public class TestAudio {
     public swingcanvas canvas;
     File file;
     boolean isend;
-
+    boolean isadjusting=false;
+    int targettime=-1;
     /**
      * @param args the command line arguments
      */
-
     public TestAudio(File f) {
         file = f;
     }
@@ -101,26 +104,84 @@ public class TestAudio {
         canvas = new swingcanvas(128, channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
 
+        //
+        
+        JSlider slider=new JSlider(0,100);
+        slider.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                 //To change body of generated methods, choose Tools | Templates.
+                 setIsadjusting(true);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setTargettime(slider.getValue());
+                setIsadjusting(false);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        canvas.frame.add(slider);
+        slider.setSize(250,15);
+        slider.setLocation(500,75);
+        //
         System.gc();
         int[][] paintarr = new int[channel][128 * 2];
         Thread p = null;
         Thread play = null;
+        outer:
         for (int i = 0; i < framelength;) {
-            if (canvas.isstop()) {
+            while (canvas.isstop()) {
+                if (canvas.issterminated()) {
+                    break outer;
+                }
+                speaker.stop();
+            }
+            if (canvas.issterminated()) {
                 break;
             }
-
+            
+            if(targettime!=-1){
+                i=targettime*framelength/100;
+                slider.setValue(targettime);
+                targettime=-1;
+                //speaker.stop();   cause freeze at the end???
+                speaker.setFramePosition(i);
+            }else{
+                if (!isadjusting) {
+                    slider.setValue((int)(i*100f/framelength));
+                }
+            }
             final int index = i;
+            
+            
             if (i + step > sample[0].length) {
                 break;
             }
 
             canvas.settime(i * speaker.getMicrosecondLength() / framelength);
+            
 
+            
             play = new Thread(() -> {
                 speaker.setLoopPoints(index, index + step);
                 speaker.loop(0);
-                while (speaker.getFramePosition() < index + step) {
+                while (speaker.getFramePosition() < index + step&&targettime==-1) {
+                   
                 }
             });
             try {
@@ -128,19 +189,17 @@ public class TestAudio {
                     for (int k = 0; k < 128 * 2; k++) {
 
                         int sum = 0;
-                        for (int j = 0; j < 12; j++) {
+                        for (int j = 0; j < 9; j++) {
                             sum += sample[ch][i];
                             i++;
                         }
-                        sum /= 12;
+                        sum /= 9;
                         paintarr[ch][k] = sum;
 
                     }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                restart();
-                sample = null;
-                return;
+                break;
             }
             p = new Thread(() -> {
                 canvas.update(paintarr);
@@ -158,6 +217,7 @@ public class TestAudio {
             p = null;
             play = null;
             System.gc();
+            
         }
         restart();
         speaker.stop();
@@ -187,4 +247,15 @@ public class TestAudio {
         file = null;
         System.gc();
     }
+
+    public void setIsadjusting(boolean isadjusting) {
+        this.isadjusting = isadjusting;
+    }
+
+    public void setTargettime(int targettime) {
+        this.targettime = targettime;
+    }
+    
+    
+    
 }
