@@ -6,6 +6,7 @@
 package testaudio;
 
 import java.awt.AWTException;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.HeadlessException;
@@ -41,7 +42,7 @@ public class gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.00f;
+    static final float version = 1.04f;
 
     @Override
     public void drop(DropTargetDropEvent dtde) {
@@ -75,9 +76,11 @@ public class gui extends JFrame implements DropTargetListener {
         this.setTitle("music analyzer / virtualizer");
         this.setSize(800, 700);
         this.setResizable(false);
+        getContentPane().setBackground(Color.GRAY);//change color
 
         getContentPane().setLayout(null);
         JButton check = new JButton("check update");
+        //check.setBackground(Color.GRAY);//change color
         check.addActionListener((ActionEvent e) -> {
             String ver = updatecheck.getver();
             if (ver == null) {
@@ -100,15 +103,17 @@ public class gui extends JFrame implements DropTargetListener {
                 JOptionPane.showMessageDialog(this, "you are latest now!");
             }
         });
-        check.setLocation(150, 0);
-        check.setSize(500, 50);
+        check.setLocation(0, 30);
+        check.setSize(120, 50);
         this.add(check);
         JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
+        label.setForeground(Color.WHITE);
         this.add(label).setFont(new Font("", 1, 20));
         JLabel vlabel = new JLabel("version:" + version);
         vlabel.setLocation(0, 0);
         vlabel.setSize(100, 25);
+        vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
 

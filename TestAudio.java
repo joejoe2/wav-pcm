@@ -5,6 +5,7 @@
  */
 package testaudio;
 
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -135,6 +136,8 @@ public class TestAudio {
                 //To change body of generated methods, choose Tools | Templates.
             }
         });
+        slider.setBackground(Color.GRAY);
+        slider.setForeground(Color.WHITE);
         canvas.frame.add(slider);
         slider.setSize(250,15);
         slider.setLocation(500,75);
