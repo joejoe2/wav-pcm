@@ -55,7 +55,7 @@ public class swingcanvas extends JPanel {
             }
         }
         int d = 1000;
-        double[][] freq = new double[paintarr.length][paintarr[0].length];
+        double[][] freq =new double[paintarr.length][paintarr[0].length];
         for (int ch = 0; ch < paintarr.length; ch++) {
             freq[ch] = Arrays.stream(paintarr[ch]).mapToDouble(dd -> {
                 return dd;
@@ -82,45 +82,6 @@ public class swingcanvas extends JPanel {
     public void paint(Graphics g) {
         super.paint(g); //To change body of generated methods, choose Tools | Templates.
         //paint call paintcomponent paintborder panitchild actually
-        /*for (int ch = 0; ch < paintarr.length; ch++) {
-            int d = ch == 1 ? 200 : 450;
-            for (int i = 0; i < paintarr[ch].length - 1; i++) {
-                int y1 = paintarr[ch][i] / 250, y2 = paintarr[ch][i + 1] / 250;
-
-                y1 = (y1 >= 0) ? d - y1 : d - y1;
-                y2 = (y2 >= 0) ? d - y2 : d - y2;
-
-                if (opt == 0) {
-                    g.drawLine(i * 3, y1, (i + 1) * 3, y2);
-                } else {
-                    g.drawLine(i * 3, y1, (i + 1) * 3, y1);
-                    g.drawLine((i + 1) * 3, y1, (i + 1) * 3, y2);
-                }
-            }
-        }
-        int d = 1000;
-        double[][] freq = new double[paintarr.length][paintarr[0].length];
-        for (int ch = 0; ch < paintarr.length; ch++) {
-            freq[ch] = Arrays.stream(paintarr[ch]).mapToDouble(dd -> {
-                return dd;
-            }).toArray();
-            freq[ch] = caculatefft.getMagnitudes(freq[ch]);
-            freq[ch] = Arrays.stream(freq[ch]).map(dd -> {
-                return dd / d >= 140 ? (dd - d * 140) / 4 + d * 40 : dd / d >= 80 ? dd - d * 40 : dd / d >= 40 ? dd - d * 15 : dd / d >= 25 ? dd - d * 5 : dd;
-            }).toArray();
-            g.drawLine(832 + 50, 250 * (ch + 1), 832 + 50 + freq[ch].length * 15 / 2, 250 * (ch + 1));
-            for (int i = 0; i < freq[ch].length - 1; i++) {
-                int y1 = 250 * (ch + 1) - (int) freq[ch][i] / d;
-                int y2 = 250 * (ch + 1) - (int) freq[ch][i + 1] / d;
-                g.drawLine((i) * 15 / 2 + 832 + 50, y1, (i) * 15 / 2 + 832 + 50, 250 * (ch + 1));
-                g.drawLine((i) * 15 / 2 + 832 + 50, y1, (i + 1) * 15 / 2 + 832 + 50, y1);
-                g.drawLine((i + 1) * 15 / 2 + 832 + 50, y1, (i + 1) * 15 / 2 + 832 + 50, y2);
-                g.drawLine((i + 1) * 15 / 2 + 832 + 50, y1, (i + 1) * 15 / 2 + 832 + 50, 250 * (ch + 1));
-            }
-            g.drawLine((freq[ch].length - 1) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d, (freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d);
-            g.drawLine((freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d, (freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1));
-        }*/
-
     }
 
     public void update(int[][] arr) {
@@ -128,7 +89,7 @@ public class swingcanvas extends JPanel {
         repaint();
     }
 
-    public swingcanvas(int len, int channel, String name, long microsec) {
+    public swingcanvas( int channel, String name, long microsec) {
         this.setBackground(Color.BLACK);
         paintarr = new int[channel][128 * 2];
         frame = new JFrame();

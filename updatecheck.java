@@ -40,6 +40,7 @@ public class updatecheck {
                 if (result == -1) {
                     return null;
                 }
+                System.out.println(line);
                 return line.substring(result + 8, line.indexOf(".txt"));
             } catch (IOException ex) {
                 Logger.getLogger(updatecheck.class.getName()).log(Level.SEVERE, null, ex);

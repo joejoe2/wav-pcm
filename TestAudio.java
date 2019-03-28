@@ -100,9 +100,10 @@ public class TestAudio {
             }
             audioinputstream = null;
         }
-
-        final int step = 128 * 2 * 12;
-        canvas = new swingcanvas(128, channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
+        final int averagenum=16;
+        final int step = 128 * 2 * averagenum;
+        
+        canvas = new swingcanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
 
         //
@@ -142,7 +143,6 @@ public class TestAudio {
         slider.setSize(250,15);
         slider.setLocation(500,75);
         //
-        System.gc();
         int[][] paintarr = new int[channel][128 * 2];
         Thread p = null;
         Thread play = null;
@@ -183,20 +183,21 @@ public class TestAudio {
             play = new Thread(() -> {
                 speaker.setLoopPoints(index, index + step);
                 speaker.loop(0);
-                while (speaker.getFramePosition() < index + step&&targettime==-1) {
+                while (speaker.getFramePosition()< index + step&&targettime==-1) {
                    
                 }
             });
             try {
                 for (int ch = 0; ch < channel; ch++) {
+                    i=index;
                     for (int k = 0; k < 128 * 2; k++) {
 
                         int sum = 0;
-                        for (int j = 0; j < 9; j++) {
+                        for (int j = 0; j < averagenum; j++) {
                             sum += sample[ch][i];
                             i++;
                         }
-                        sum /= 9;
+                        sum /= averagenum;
                         paintarr[ch][k] = sum;
 
                     }
@@ -207,8 +208,6 @@ public class TestAudio {
             p = new Thread(() -> {
                 canvas.update(paintarr);
             });
-            p.setPriority(5);
-            play.setPriority(2);
             p.start();
             play.start();
             try {
@@ -217,20 +216,12 @@ public class TestAudio {
             } catch (InterruptedException ex) {
                 Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            p = null;
-            play = null;
             System.gc();
             
         }
         restart();
         speaker.stop();
         //speaker.close();
-        sample = null;
-        canvas = null;
-        file = null;
-        p = null;
-        play = null;
-        System.gc();
         return;
     }
 
@@ -248,7 +239,6 @@ public class TestAudio {
         canvas.end();
         canvas = null;
         file = null;
-        System.gc();
     }
 
     public void setIsadjusting(boolean isadjusting) {

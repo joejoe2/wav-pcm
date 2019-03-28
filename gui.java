@@ -65,7 +65,7 @@ public class gui extends JFrame implements DropTargetListener {
         }
         Thread t = new Thread(() -> {
             if (file != null) {
-                start();
+                startAnalysis();
             }
         });
         t.start();
@@ -106,6 +106,13 @@ public class gui extends JFrame implements DropTargetListener {
         check.setLocation(0, 30);
         check.setSize(120, 50);
         this.add(check);
+        JButton toGameMenu=new JButton("game mode");
+        toGameMenu.addActionListener((e) -> {
+            starGameMenu();
+        });
+        toGameMenu.setLocation(0, 90);
+        toGameMenu.setSize(120, 50);
+        this.add(toGameMenu);
         JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
         label.setForeground(Color.WHITE);
@@ -115,6 +122,7 @@ public class gui extends JFrame implements DropTargetListener {
         vlabel.setSize(100, 25);
         vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
+        
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
 
         this.setVisible(true);
@@ -125,11 +133,8 @@ public class gui extends JFrame implements DropTargetListener {
 
     }
 
-    public void start() {
+    public void startAnalysis() {
         this.setVisible(false);
-        System.gc();
-        System.gc();
-        System.gc();
         if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
             try {
                 file = convert.mp3ToWav(file.getAbsoluteFile());
@@ -157,9 +162,6 @@ public class gui extends JFrame implements DropTargetListener {
             requireddel = false;
         }
         file = null;
-        System.gc();
-        System.gc();
-        System.gc();
         gui.this.setVisible(true);
         gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
@@ -173,6 +175,15 @@ public class gui extends JFrame implements DropTargetListener {
         }
     }
 
+    public void starGameMenu(){
+        this.setVisible(false);
+        GameMenu menu=new GameMenu();
+        gui.this.setVisible(true);
+        gui.this.setAlwaysOnTop(true);
+        gui.this.toFront();
+        gui.this.setAlwaysOnTop(false);
+    }
+    
     public static void main(String[] args) {
         new gui();
     }
