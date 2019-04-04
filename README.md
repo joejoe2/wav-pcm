@@ -1,5 +1,5 @@
 # wav-pcm
-update 2019 3 11
+update 2019 4 4
 
 功能:讀取並分析音樂檔的訊號(波形、頻率)
 
@@ -16,7 +16,7 @@ update 2019 3 11
   3.測試記憶體占用 視情況重啟jvm
 
 
-穩定版本: v1.04
+穩定版本: v1.05
 
 JDK版本:1.8.0_181
 
@@ -60,4 +60,6 @@ v1.0-正式版發佈
 
 v1.03-新增時間條功能(測試中...)
 
-v1.04-變更布景顏色、繪圖函數改為paintComponet、原本import com.sun.media.sound.FFT改為直接複製該.java檔至專案中防止java9以上的版本無法正確執行 修正計算錯誤
+v1.04-變更布景顏色、繪圖函數改為paintComponet、原本import com.sun.media.sound.FFT改為直接複製該.java檔至專案中防止java9以上的版本無法正確執行 
+
+v1.05-修正計算錯誤 新增可選擇分析細節多寡(影響取平均數)   目前gamemode為empty
