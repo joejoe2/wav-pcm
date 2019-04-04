@@ -20,13 +20,13 @@ public class Beat {
         this.x=x;
         this.y=y;
         if(type==0){
-          width=10;
-          length=40;
+          width=40;
+          length=10;
         }
     }
     
     public void draw(Graphics g){
-       g.drawRect((int)x, (int)y, width, length);
+       g.fillRect((int)x, (int)y, width, length);
     }
     
     public void moveOffset(float dx,float dy){

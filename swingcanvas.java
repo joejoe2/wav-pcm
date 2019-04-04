@@ -11,7 +11,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -76,6 +75,7 @@ public class swingcanvas extends JPanel {
             g.drawLine((freq[ch].length - 1) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d, (freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d);
             g.drawLine((freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1) - (int) freq[ch][freq[ch].length - 1] / d, (freq[ch].length) * 15 / 2 + 832 + 50, 250 * (ch + 1));
         }
+        
     }
 
     @Override

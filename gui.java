@@ -28,10 +28,16 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -42,8 +48,9 @@ public class gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.04f;
-
+    static final float version = 1.05f;
+    String[] modeOpt={"slow","normal","precise","real"};
+    JComboBox comboBox;
     @Override
     public void drop(DropTargetDropEvent dtde) {
         Object o = null;
@@ -77,10 +84,9 @@ public class gui extends JFrame implements DropTargetListener {
         this.setSize(800, 700);
         this.setResizable(false);
         getContentPane().setBackground(Color.GRAY);//change color
-
         getContentPane().setLayout(null);
+        //
         JButton check = new JButton("check update");
-        //check.setBackground(Color.GRAY);//change color
         check.addActionListener((ActionEvent e) -> {
             String ver = updatecheck.getver();
             if (ver == null) {
@@ -106,6 +112,7 @@ public class gui extends JFrame implements DropTargetListener {
         check.setLocation(0, 30);
         check.setSize(120, 50);
         this.add(check);
+        //
         JButton toGameMenu=new JButton("game mode");
         toGameMenu.addActionListener((e) -> {
             starGameMenu();
@@ -113,6 +120,8 @@ public class gui extends JFrame implements DropTargetListener {
         toGameMenu.setLocation(0, 90);
         toGameMenu.setSize(120, 50);
         this.add(toGameMenu);
+        //
+        
         JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
         label.setBounds(150, 300, 500, 100);
         label.setForeground(Color.WHITE);
@@ -122,15 +131,33 @@ public class gui extends JFrame implements DropTargetListener {
         vlabel.setSize(100, 25);
         vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
+        //
+        //
+        
+        comboBox=new JComboBox(modeOpt);
+        comboBox.setSelectedItem("normal");
+        comboBox.setSize(100,40);
+        comboBox.setLocation(260,35);
+        comboBox.setFont(new Font("", 1, 15));
+        this.add(comboBox);
+        //
+        JLabel modetxt=new JLabel("analyze mode:");
+        modetxt.setFont(new Font("", 1, 15));
+        modetxt.setForeground(Color.WHITE);
+        modetxt.setSize(100,30);
+        modetxt.setLocation(150,40);
+        this.add(modetxt);
+        
+        //
+        //
         
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
-
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.this.setAlwaysOnTop(true);
         gui.this.toFront();
         gui.this.setAlwaysOnTop(false);
-
+        //
     }
 
     public void startAnalysis() {
@@ -149,7 +176,7 @@ public class gui extends JFrame implements DropTargetListener {
             requireddel = false;
         }
 
-        test = new TestAudio(file.getAbsoluteFile());
+        test = new TestAudio(file.getAbsoluteFile(),comboBox.getSelectedIndex());
 
         try {
             test.main();
@@ -158,6 +185,7 @@ public class gui extends JFrame implements DropTargetListener {
         }
         test = null;
         if (requireddel) {
+            System.gc();
             file.delete();
             requireddel = false;
         }

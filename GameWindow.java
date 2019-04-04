@@ -16,11 +16,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
 /**
  *
@@ -33,12 +31,12 @@ public class GameWindow extends JPanel{
     boolean isend;
     AudioFormat format;
     long framelength;
-    //Beat test;
+    Beat test;
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         g.setColor(Color.GREEN);
-        //test.draw(g);
+        test.draw(g);
         
     }
 
@@ -93,7 +91,7 @@ public class GameWindow extends JPanel{
     public void main() throws Exception{
        int framelimit=(int)format.getFrameRate()/40; //set update rate 40fps
         System.out.println(framelimit);
-        //test=new Beat(20, 0, 10, 40);
+        test=new Beat(20, -20, 0);
        for(int i=0;i<framelength;i+=framelimit){
           if(isend){break;}
           final int index=i;
@@ -105,7 +103,7 @@ public class GameWindow extends JPanel{
                 }
             });
           play.run();
-          //test.moveOffset(0, 8);
+          test.moveOffset(0, 8);
           repaint();
           play.join();
           System.gc();

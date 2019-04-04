@@ -31,11 +31,23 @@ public class TestAudio {
     boolean isend;
     boolean isadjusting=false;
     int targettime=-1;
+    final int averagenum;
     /**
      * @param args the command line arguments
      */
-    public TestAudio(File f) {
+    public TestAudio(File f,int mode) {
         file = f;
+        if(mode==0){
+          averagenum=16;
+        }else if(mode==1){
+          averagenum=12;
+        }else if(mode==2){
+          averagenum=4;
+        }else if(mode==3){
+          averagenum=1;
+        }else{
+          averagenum=16;
+        }
     }
 
     public void main() throws Exception {
@@ -100,13 +112,12 @@ public class TestAudio {
             }
             audioinputstream = null;
         }
-        final int averagenum=16;
+        
         final int step = 128 * 2 * averagenum;
         
         canvas = new swingcanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
 
-        //
         
         JSlider slider=new JSlider(0,100);
         slider.addMouseListener(new MouseListener() {
@@ -216,7 +227,7 @@ public class TestAudio {
             } catch (InterruptedException ex) {
                 Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.gc();
+            //System.gc();
             
         }
         restart();
