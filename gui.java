@@ -28,16 +28,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 
 /**
  *
@@ -48,8 +43,8 @@ public class gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.05f;
-    String[] modeOpt={"slow","normal","precise","real"};
+    static final float version = 1.051f;
+    String[] modeOpt={"slow","normal","precise"};
     JComboBox comboBox;
     @Override
     public void drop(DropTargetDropEvent dtde) {
@@ -128,7 +123,7 @@ public class gui extends JFrame implements DropTargetListener {
         this.add(label).setFont(new Font("", 1, 20));
         JLabel vlabel = new JLabel("version:" + version);
         vlabel.setLocation(0, 0);
-        vlabel.setSize(100, 25);
+        vlabel.setSize(120, 25);
         vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
         //

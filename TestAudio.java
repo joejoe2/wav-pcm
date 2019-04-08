@@ -42,9 +42,7 @@ public class TestAudio {
         }else if(mode==1){
           averagenum=12;
         }else if(mode==2){
-          averagenum=4;
-        }else if(mode==3){
-          averagenum=1;
+          averagenum=8;
         }else{
           averagenum=16;
         }
