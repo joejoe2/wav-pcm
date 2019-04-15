@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
@@ -32,6 +33,8 @@ public class GameWindow extends JPanel{
     AudioFormat format;
     long framelength;
     Beat test;
+    
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
@@ -43,6 +46,8 @@ public class GameWindow extends JPanel{
     
  
     public GameWindow(File f) throws Exception{
+        
+        
         file=f;
         frame=new JFrame();
         frame.setTitle("music game");

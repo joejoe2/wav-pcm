@@ -64,14 +64,14 @@ public class GameMenu extends JFrame implements DropTargetListener{
             List<File> l = (List<File>) (o);
             file = l.get(0);
         } catch (UnsupportedFlavorException ex) {
-            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         } catch (AWTException ex) {
-            Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
         Thread t = new Thread(() -> {
             if (file != null) {
@@ -85,11 +85,11 @@ public class GameMenu extends JFrame implements DropTargetListener{
         this.setVisible(false);
         if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
             try {
-                file = convert.mp3ToWav(file.getAbsoluteFile());
+                file = Convert.mp3ToWav(file.getAbsoluteFile());
             } catch (UnsupportedAudioFileException ex) {
-                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
             file.deleteOnExit();
             requireddel = true;

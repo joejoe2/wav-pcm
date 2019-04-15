@@ -26,7 +26,7 @@ import javax.swing.JSlider;
  */
 public class TestAudio {
 
-    public swingcanvas canvas;
+    public SwingCanvas canvas;
     File file;
     boolean isend;
     boolean isadjusting=false;
@@ -38,13 +38,13 @@ public class TestAudio {
     public TestAudio(File f,int mode) {
         file = f;
         if(mode==0){
-          averagenum=16;
+          averagenum=16/2;
         }else if(mode==1){
-          averagenum=12;
+          averagenum=12/2;
         }else if(mode==2){
-          averagenum=8;
+          averagenum=8/2;
         }else{
-          averagenum=16;
+          averagenum=16/2;
         }
     }
 
@@ -113,7 +113,7 @@ public class TestAudio {
         
         final int step = 128 * 2 * averagenum;
         
-        canvas = new swingcanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
+        canvas = new SwingCanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
 
         
@@ -152,7 +152,7 @@ public class TestAudio {
         slider.setSize(250,15);
         slider.setLocation(500,75);
         //
-        int[][] paintarr = new int[channel][128 * 2];
+        int[][] paintarr = new int[channel][128 * 2*2];
         Thread p = null;
         Thread play = null;
         outer:
@@ -199,7 +199,7 @@ public class TestAudio {
             try {
                 for (int ch = 0; ch < channel; ch++) {
                     i=index;
-                    for (int k = 0; k < 128 * 2; k++) {
+                    for (int k = 0; k < 128 * 2*2; k++) {
 
                         int sum = 0;
                         for (int j = 0; j < averagenum; j++) {
