@@ -94,9 +94,9 @@ public class Gui extends JFrame implements DropTargetListener {
     
     public Gui() throws HeadlessException {
         //
-        File folder=new File("D:/music");
-        listAllFile(folder);
-        System.out.println("there are "+musicNum+" musics in "+folder.getAbsolutePath());
+        //File folder=new File("D:/music");
+        //listAllFile(folder);
+        //System.out.println("there are "+musicNum+" musics in "+folder.getAbsolutePath());
         //
         this.pack();
         this.setTitle("music analyzer / virtualizer");
