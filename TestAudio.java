@@ -53,9 +53,7 @@ public class TestAudio {
         AudioInputStream audioinputstream = null;
         try {
             audioinputstream = AudioSystem.getAudioInputStream(file);
-        } catch (UnsupportedAudioFileException ex) {
-            Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (UnsupportedAudioFileException | IOException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
         }
         AudioFormat format = audioinputstream.getFormat();
@@ -84,10 +82,11 @@ public class TestAudio {
                 }
             }
         }
-
+        
         try {
             audioinputstream.close();
             audioinputstream = null;
+            System.gc();
             audioinputstream = AudioSystem.getAudioInputStream(file);
         } catch (UnsupportedAudioFileException ex) {
             Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
@@ -96,7 +95,7 @@ public class TestAudio {
         } finally {
             bytes = null;
         }
-
+        System.gc();
         Clip speaker = (Clip) AudioSystem.getLine(new DataLine.Info(Clip.class, format));
         try {
             speaker.open(audioinputstream);
@@ -116,7 +115,7 @@ public class TestAudio {
         canvas = new SwingCanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
 
-        
+        System.gc();
         JSlider slider=new JSlider(0,100);
         slider.addMouseListener(new MouseListener() {
             @Override
@@ -155,8 +154,11 @@ public class TestAudio {
         int[][] paintarr = new int[channel][128 * 2*2];
         Thread p = null;
         Thread play = null;
+        System.gc();
+        
         outer:
         for (int i = 0; i < framelength;) {
+            
             while (canvas.isstop()) {
                 if (canvas.issterminated()) {
                     break outer;
@@ -186,16 +188,7 @@ public class TestAudio {
             }
 
             canvas.settime(i * speaker.getMicrosecondLength() / framelength);
-            
-
-            
-            play = new Thread(() -> {
-                speaker.setLoopPoints(index, index + step);
-                speaker.loop(0);
-                while (speaker.getFramePosition()< index + step&&targettime==-1) {
-                   
-                }
-            });
+ 
             try {
                 for (int ch = 0; ch < channel; ch++) {
                     i=index;
@@ -214,9 +207,18 @@ public class TestAudio {
             } catch (ArrayIndexOutOfBoundsException e) {
                 break;
             }
+            play = new Thread(() -> {
+                speaker.setLoopPoints(index, index + step);
+                speaker.loop(0);
+                while (speaker.getFramePosition()< index + step&&targettime==-1) {
+                   
+                }
+            });
             p = new Thread(() -> {
                 canvas.update(paintarr);
             });
+            play.setPriority(1);
+            p.setPriority(5);
             p.start();
             play.start();
             try {
@@ -230,7 +232,7 @@ public class TestAudio {
         }
         restart();
         speaker.stop();
-        //speaker.close();
+        speaker.close();
         return;
     }
 
@@ -248,6 +250,7 @@ public class TestAudio {
         canvas.end();
         canvas = null;
         file = null;
+        System.gc();
     }
 
     public void setIsadjusting(boolean isadjusting) {

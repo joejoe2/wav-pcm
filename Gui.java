@@ -21,8 +21,14 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.util.*;
 import java.util.logging.Level;
@@ -30,9 +36,11 @@ import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -43,10 +51,14 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.052f;
+    static final float version = 1.053f;
     String[] modeOpt={"slow","normal","fast"};
     JComboBox comboBox;
     int musicNum=0;
+    ArrayList<File> filelist;
+    File folder;
+    ListView view;
+    JScrollPane jScrollPane;
     @Override
     public void drop(DropTargetDropEvent dtde) {
         Object o = null;
@@ -84,7 +96,8 @@ public class Gui extends JFrame implements DropTargetListener {
                 listAllFile(s);
             }
             else if(s.getName().endsWith(".mp3")||s.getName().endsWith(".wav")){
-                System.out.println(s.getName());
+                //System.out.println(s.getName());
+                filelist.add(s);
                 musicNum++;
             }
             
@@ -93,13 +106,8 @@ public class Gui extends JFrame implements DropTargetListener {
     }
     
     public Gui() throws HeadlessException {
-        //
-        //File folder=new File("D:/music");
-        //listAllFile(folder);
-        //System.out.println("there are "+musicNum+" musics in "+folder.getAbsolutePath());
-        //
-        this.pack();
-        this.setTitle("music analyzer / virtualizer");
+        
+        this.setTitle("music analyzer / visualizer");
         this.setSize(800, 700);
         this.setResizable(false);
         getContentPane().setBackground(Color.GRAY);//change color
@@ -140,11 +148,6 @@ public class Gui extends JFrame implements DropTargetListener {
         toGameMenu.setSize(120, 50);
         this.add(toGameMenu);
         //
-        
-        JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
-        label.setBounds(150, 300, 500, 100);
-        label.setForeground(Color.WHITE);
-        this.add(label).setFont(new Font("", 1, 20));
         JLabel vlabel = new JLabel("version:" + version);
         vlabel.setLocation(0, 0);
         vlabel.setSize(120, 25);
@@ -168,6 +171,34 @@ public class Gui extends JFrame implements DropTargetListener {
         this.add(modetxt);
         
         //
+        JFileChooser chooser=new JFileChooser();
+        chooser.setCurrentDirectory(new File("."));
+        chooser.setDialogTitle("select where to search your music");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        
+        //
+        JButton chbtn=new JButton("choose folder");
+        chbtn.setFont(new Font("", 1, 15));
+        chbtn.setSize(150,50);
+        chbtn.setLocation(650,120);
+        this.add(chbtn);
+        
+        chbtn.addActionListener((e) -> {
+            if(chooser.showOpenDialog(Gui.this)==JFileChooser.APPROVE_OPTION){
+                folder=chooser.getSelectedFile();
+                System.out.println(folder);
+                search();
+                Gui.this.revalidate();
+                Gui.this.repaint();
+                Gui.this.writeRecord();
+            }
+        });
+        
+        //
+        folder=readRecord();
+        search();
+        //
         //
         
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
@@ -177,8 +208,83 @@ public class Gui extends JFrame implements DropTargetListener {
         Gui.this.toFront();
         Gui.this.setAlwaysOnTop(false);
         //
+        
     }
 
+    public void writeRecord(){
+         if (new File("setting.ini").exists()&&folder!=null&&folder.exists()) {
+                 File ini=new File("setting.ini");
+            try {
+                ini.createNewFile();
+                PrintWriter printWriter=new PrintWriter(ini);
+                printWriter.println("search folder:"+folder);
+                printWriter.flush();
+                printWriter.close();
+                System.gc();
+            }catch(Exception e){
+                  Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, e);
+            }
+         }
+    } 
+    
+    public File readRecord(){
+        if (new File("setting.ini").exists()) {
+              File ini=new File("setting.ini");
+            try {
+                FileReader reader=new FileReader(ini);
+                BufferedReader bufferedReader=new BufferedReader(reader);
+                String str=bufferedReader.readLine();
+                reader.close();
+                bufferedReader.close();
+                str=str.substring(14);
+                System.out.println(str);
+                System.gc();
+                if(str=="null"){
+                    return null;
+                }else if(new File(str).exists()){
+                     return new File(str);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+              
+        }else{
+              File ini=new File("setting.ini");
+            try {
+                ini.createNewFile();
+                PrintWriter printWriter=new PrintWriter(ini);
+                printWriter.println("search folder:null");
+                printWriter.flush();
+                printWriter.close();
+                System.gc();
+            } catch (IOException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        }
+        
+        return null;
+    }
+    
+    public void search(){
+        if(folder!=null&&filelist==null&&jScrollPane==null&&view==null){
+        filelist=new ArrayList<File>();
+        listAllFile(folder);
+        view=new ListView(filelist, this);
+        
+        jScrollPane=new JScrollPane(view);
+        jScrollPane.setSize(795, 500);
+        jScrollPane.setLocation(0,170);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(jScrollPane.getVerticalScrollBar().getUnitIncrement()*6);
+        this.add(jScrollPane);
+        }else if(folder!=null){
+              filelist=new ArrayList<File>();
+              listAllFile(folder);
+              view.update(filelist, this);
+        }
+    }
+    
     public void startAnalysis() {
         this.setVisible(false);
         if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
@@ -200,7 +306,7 @@ public class Gui extends JFrame implements DropTargetListener {
         try {
             test.main();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "can not surpport " + file.getName().substring(file.getName().lastIndexOf(".")) + " file!" + "\nonly surpport .wav or .mp3 now!");
+            JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
         }
         test = null;
         if (requireddel) {
@@ -209,17 +315,20 @@ public class Gui extends JFrame implements DropTargetListener {
             requireddel = false;
         }
         file = null;
-        Gui.this.setVisible(true);
-        Gui.this.setAlwaysOnTop(true);
-        Gui.this.toFront();
-        Gui.this.setAlwaysOnTop(false);
-        if (Runtime.getRuntime().totalMemory() >= 300 * 1000 * 1000) {
+        
+        search();
+        
+        this.setVisible(true);
+        this.setAlwaysOnTop(true);
+        this.toFront();
+        this.setAlwaysOnTop(false);
+        /*if (Runtime.getRuntime().totalMemory() >= 300 * 1000 * 1000) {
             try {
                 restart();
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
     }
 
     public void starGameMenu(){
@@ -236,8 +345,10 @@ public class Gui extends JFrame implements DropTargetListener {
     }
 
     public static void restart() throws IOException {
+        
         Runtime.getRuntime().exec("java -jar run.jar");
         System.exit(0);
+        
     }
 
     @Override

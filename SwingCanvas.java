@@ -105,7 +105,7 @@ public class SwingCanvas extends JPanel {
         frame.getContentPane().add(this);
         frame.getContentPane().setBackground(Color.GRAY);
         this.setLocation(0, 125);
-        this.setSize(1050, 600);
+        this.setSize(1100, 600);
         this.setBorder(new BevelBorder(1));
         frame.getContentPane().add(nlabel).setFont(new Font("", 1, 20));
         nlabel.setLocation(0, 0);
@@ -156,7 +156,7 @@ public class SwingCanvas extends JPanel {
         flabel.setSize(200, 25);
         flabel.setLocation(this.getWidth() / 4 * 3, 100);
         flabel.setForeground(Color.WHITE);
-        frame.setSize(1100, 800);
+        frame.setSize(1100, 780);
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
