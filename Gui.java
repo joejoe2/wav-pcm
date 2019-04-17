@@ -23,9 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -51,7 +48,7 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.053f;
+    static final float version = 1.054f;
     String[] modeOpt={"slow","normal","fast"};
     JComboBox comboBox;
     int musicNum=0;
@@ -237,7 +234,6 @@ public class Gui extends JFrame implements DropTargetListener {
                 reader.close();
                 bufferedReader.close();
                 str=str.substring(14);
-                System.out.println(str);
                 System.gc();
                 if(str=="null"){
                     return null;
@@ -290,6 +286,7 @@ public class Gui extends JFrame implements DropTargetListener {
         if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
             try {
                 file = Convert.mp3ToWav(file.getAbsoluteFile());
+                System.gc();
             } catch (UnsupportedAudioFileException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -304,6 +301,7 @@ public class Gui extends JFrame implements DropTargetListener {
         test = new TestAudio(file.getAbsoluteFile(),comboBox.getSelectedIndex());
 
         try {
+            System.gc();
             test.main();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");

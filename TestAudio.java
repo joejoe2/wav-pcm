@@ -110,7 +110,7 @@ public class TestAudio {
             audioinputstream = null;
         }
         
-        final int step = 128 * 2 * averagenum;
+        final int step = 128 *2* 2 * averagenum;
         
         canvas = new SwingCanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
         file = null;
@@ -152,9 +152,10 @@ public class TestAudio {
         slider.setLocation(500,75);
         //
         int[][] paintarr = new int[channel][128 * 2*2];
-        Thread p = null;
-        Thread play = null;
+        //Thread p = null;
+        //Thread play = null;
         System.gc();
+        
         
         outer:
         for (int i = 0; i < framelength;) {
@@ -186,7 +187,8 @@ public class TestAudio {
             if (i + step > sample[0].length) {
                 break;
             }
-
+            speaker.setLoopPoints(index, index + step);
+            speaker.loop(0);
             canvas.settime(i * speaker.getMicrosecondLength() / framelength);
  
             try {
@@ -207,6 +209,7 @@ public class TestAudio {
             } catch (ArrayIndexOutOfBoundsException e) {
                 break;
             }
+            /*
             play = new Thread(() -> {
                 speaker.setLoopPoints(index, index + step);
                 speaker.loop(0);
@@ -226,8 +229,14 @@ public class TestAudio {
                 play.join();
             } catch (InterruptedException ex) {
                 Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
             //System.gc();
+            
+            canvas.update(paintarr);
+            while (speaker.getFramePosition()< index + step) {
+                   //System.out.println("w");
+                   Thread.sleep(10);
+            }
             
         }
         restart();

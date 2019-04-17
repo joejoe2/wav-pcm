@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
-import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
@@ -40,7 +39,7 @@ public class GameWindow extends JPanel{
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         g.setColor(Color.GREEN);
         test.draw(g);
-        
+        //draw
     }
 
     
@@ -97,20 +96,29 @@ public class GameWindow extends JPanel{
        int framelimit=(int)format.getFrameRate()/40; //set update rate 40fps
         System.out.println(framelimit);
         test=new Beat(20, -20, 0);
+        int nowtime=0;
+        int timer=4;
        for(int i=0;i<framelength;i+=framelimit){
           if(isend){break;}
           final int index=i;
-          Thread play = new Thread(() -> {
-                speaker.setLoopPoints(index, index+framelimit);
-                speaker.loop(0);
-                while (speaker.getFramePosition() < index) {
-                   
-                }
-            });
-          play.run();
+          speaker.setLoopPoints(index, index+framelimit);
+          speaker.loop(0);
+          //
+          if(timer==4){
+              //generate beats
+               nowtime=i==0?0:++nowtime;
+               timer=0;
+          }else{
+               ++timer;
+          }
+          //  
+          //move beats
           test.moveOffset(0, 8);
+          //
           repaint();
-          play.join();
+          while (speaker.getFramePosition() < index) {
+                   
+          }
           System.gc();
        }
        speaker.stop();

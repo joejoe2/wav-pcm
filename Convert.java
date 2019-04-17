@@ -36,6 +36,9 @@ public class Convert {
         // write stream into a file with file format wav
         File f = new File(mp3Data.getName().substring(0, mp3Data.getName().lastIndexOf(".")));
         AudioSystem.write(converted, Type.WAVE, f);
+        mp3Stream.close();
+        converted.close();
+        System.gc();
         return f.getAbsoluteFile();
     }
 
