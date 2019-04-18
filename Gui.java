@@ -48,7 +48,7 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.054f;
+    static final float version = 1.055f;
     String[] modeOpt={"slow","normal","fast"};
     JComboBox comboBox;
     int musicNum=0;
@@ -304,6 +304,7 @@ public class Gui extends JFrame implements DropTargetListener {
             System.gc();
             test.main();
         } catch (Exception ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
         }
         test = null;

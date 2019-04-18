@@ -187,8 +187,12 @@ public class TestAudio {
             if (i + step > sample[0].length) {
                 break;
             }
+            try{
             speaker.setLoopPoints(index, index + step);
             speaker.loop(0);
+            }catch(Exception e){
+                   e.printStackTrace();
+            }
             canvas.settime(i * speaker.getMicrosecondLength() / framelength);
  
             try {
@@ -209,29 +213,6 @@ public class TestAudio {
             } catch (ArrayIndexOutOfBoundsException e) {
                 break;
             }
-            /*
-            play = new Thread(() -> {
-                speaker.setLoopPoints(index, index + step);
-                speaker.loop(0);
-                while (speaker.getFramePosition()< index + step&&targettime==-1) {
-                   
-                }
-            });
-            p = new Thread(() -> {
-                canvas.update(paintarr);
-            });
-            play.setPriority(1);
-            p.setPriority(5);
-            p.start();
-            play.start();
-            try {
-                p.join();
-                play.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(TestAudio.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-            //System.gc();
-            
             canvas.update(paintarr);
             while (speaker.getFramePosition()< index + step) {
                    //System.out.println("w");
