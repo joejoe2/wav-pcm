@@ -75,7 +75,11 @@ public class GameMenu extends JFrame implements DropTargetListener{
         }
         Thread t = new Thread(() -> {
             if (file != null) {
+                try{
                 start();
+                }catch(Exception ex){
+                   ex.printStackTrace();
+                }
             }
         });
         t.start();
@@ -83,7 +87,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
     
     public void start(){
         this.setVisible(false);
-        if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
+        if (file.getName().endsWith(".mp3")) {
             try {
                 file = Convert.mp3ToWav(file.getAbsoluteFile());
             } catch (UnsupportedAudioFileException ex) {
@@ -100,6 +104,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
             gameWindow=new GameWindow(file.getAbsoluteFile());
             gameWindow.main();
         } catch (Exception ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "can not surpport " + file.getName().substring(file.getName().lastIndexOf(".")) + " file!" + "\nonly surpport .wav or .mp3 now!");
         }
         

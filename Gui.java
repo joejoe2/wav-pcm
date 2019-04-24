@@ -23,8 +23,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.util.*;
@@ -213,7 +215,7 @@ public class Gui extends JFrame implements DropTargetListener {
                  File ini=new File("setting.ini");
             try {
                 ini.createNewFile();
-                PrintWriter printWriter=new PrintWriter(ini);
+                PrintWriter printWriter=new PrintWriter(ini,"UTF-8");
                 printWriter.println("search folder:"+folder);
                 printWriter.flush();
                 printWriter.close();
@@ -228,9 +230,11 @@ public class Gui extends JFrame implements DropTargetListener {
         if (new File("setting.ini").exists()) {
               File ini=new File("setting.ini");
             try {
-                FileReader reader=new FileReader(ini);
+                FileInputStream in=new FileInputStream(ini);
+                InputStreamReader reader=new InputStreamReader(in,"UTF-8");
                 BufferedReader bufferedReader=new BufferedReader(reader);
                 String str=bufferedReader.readLine();
+                in.close();
                 reader.close();
                 bufferedReader.close();
                 str=str.substring(14);
@@ -283,7 +287,7 @@ public class Gui extends JFrame implements DropTargetListener {
     
     public void startAnalysis() {
         this.setVisible(false);
-        if (".mp3".equals(file.getName().substring(file.getName().lastIndexOf(".")))) {
+        if (file.getName().endsWith(".mp3")) {
             try {
                 file = Convert.mp3ToWav(file.getAbsoluteFile());
                 System.gc();
@@ -303,17 +307,18 @@ public class Gui extends JFrame implements DropTargetListener {
         try {
             System.gc();
             test.main();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
-        }
-        test = null;
+            test = null;
         if (requireddel) {
             System.gc();
             file.delete();
             requireddel = false;
         }
         file = null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
+        }
+        
         
         search();
         

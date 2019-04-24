@@ -165,6 +165,7 @@ public class TestAudio {
                     break outer;
                 }
                 speaker.stop();
+                Thread.sleep(10);
             }
             if (canvas.issterminated()) {
                 break;
@@ -184,7 +185,7 @@ public class TestAudio {
             final int index = i;
             
             
-            if (i + step > sample[0].length) {
+            if (i + step >= sample[0].length) {
                 break;
             }
             try{
