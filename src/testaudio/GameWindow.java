@@ -26,6 +26,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author 70136
@@ -44,21 +47,29 @@ public class GameWindow extends JPanel{
     boolean[] allow=new boolean[]{true,true,true,true};//avoid long press get hit beats
     BeatGenerator beatGenerator;//read from file and generate beats
     JLabel secJLabel;//time label
-    JLabel scoreLabel;
-    JLabel comboLabel;
+    //JLabel scoreLabel;
+    //JLabel comboLabel;
+    JLabel scoreJLabel;
+    JLabel comboJLabel;
     int nowsec=0;//record time in sec
     int nowdigit=0;//record time in digit
     int timer=1;//use to count time
     ArrayList<String> timing;//record when to check generate beats
     int holder=0;//hold the index of timing
-    int range=30;//hit range
-    int score;
-    int combo;
+    int range=40;//hit range
+    //int score;
+    //int combo;
+    float nowscore=0;
+    int nowcombo=0;
+    int [] scBound={5,10,15};
     Color lineColor=new Color(255,255,255);
     Color bgColor=new Color(0,0,160);
     Color boundColor=Color.gray;
     Color effectColor=new Color(255, 255,56);
     Color beatColor=Color.GREEN;
+    ImageIcon pic0,pic1,pic2,pic3;
+    JLabel lb0,lb1,lb2,lb3;
+    JPanel picpanel;
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
@@ -109,6 +120,13 @@ public class GameWindow extends JPanel{
         test3=new LinkedList<Beat>();
         waitdel=new LinkedList<Beat>();
         out=new LinkedList<Beat>();
+        
+        pic0=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic0.gif")));
+        pic1=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic1.gif")));
+        pic2=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic2.gif")));
+        pic3=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic3.gif")));
+        
+        
         this.setFocusable(true);
         this.addKeyListener(new KeyListener() {
             @Override
@@ -167,12 +185,45 @@ public class GameWindow extends JPanel{
         frame.add(back);
         //
         //
-        secJLabel=new JLabel("0");
+        /*secJLabel=new JLabel("0");
         secJLabel.setSize(200,100);
         secJLabel.setLocation(0,100);
         secJLabel.setFont(new Font("",1,15));
         secJLabel.setForeground(Color.white);
-        frame.add(secJLabel);
+        frame.add(secJLabel);*/
+        //
+        scoreJLabel=new JLabel("0");
+        scoreJLabel.setSize(200,100);
+        scoreJLabel.setLocation(700,100);
+        scoreJLabel.setFont(new Font("",1,15));
+        scoreJLabel.setForeground(Color.white);
+        frame.add(scoreJLabel);
+        //
+        comboJLabel=new JLabel("0");
+        comboJLabel.setSize(200,100);
+        comboJLabel.setLocation(700,200);
+        comboJLabel.setFont(new Font("",1,15));
+        comboJLabel.setForeground(Color.white);
+        frame.add(comboJLabel);
+        //
+        picpanel=new JPanel();
+        picpanel.setBackground(Color.GRAY);
+        picpanel.setSize(330,frame.getHeight());
+        picpanel.setLocation(660,300);
+        frame.getContentPane().add(picpanel);
+        //
+        lb0=new JLabel(pic0);
+        lb0.setVisible(false);
+        picpanel.add(lb0);
+        lb1=new JLabel(pic1);
+        lb1.setVisible(false);
+        picpanel.add(lb1);
+        lb2=new JLabel(pic2);
+        lb2.setVisible(false);
+        picpanel.add(lb2);
+        lb3=new JLabel(pic3);
+        lb3.setVisible(false);
+        picpanel.add(lb3);
         //
         AudioInputStream audioinputstream = AudioSystem.getAudioInputStream(file);
         speaker = (Clip) AudioSystem.getLine(new DataLine.Info(Clip.class, audioinputstream.getFormat()));
@@ -213,7 +264,9 @@ public class GameWindow extends JPanel{
           if(index+framelimit>=framelength)break;
           speaker.setLoopPoints(index, index+framelimit);
           speaker.loop(0);
-          secJLabel.setText(nowsec+"."+nowdigit+" real:"+i * speaker.getMicrosecondLength() / framelength/1000000.0);
+          //secJLabel.setText(nowsec+"."+nowdigit+" real:"+i * speaker.getMicrosecondLength() / framelength/1000000.0);
+          scoreJLabel.setText("Score : "+(int)nowscore);
+          comboJLabel.setText("Combo : "+nowcombo);
           ////generate beats check and update time
           if(timer==1){
                if(holder<timing.size()&&timing.get(holder).equals(nowsec+"."+nowdigit)){
@@ -256,50 +309,134 @@ public class GameWindow extends JPanel{
           if(allow[0]&&key[0]){
              if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=400&&test0.get(0).getY()-400<=range){
                  //System.out.println("hit");
+                 nowcombo=nowcombo+1;
+                 if(nowcombo>=scBound[2]){
+                     nowscore=nowscore+4*test0.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(true);
+                 }
+                 else if(nowcombo>=scBound[1]){
+                     nowscore=nowscore+3*test0.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(true); lb3.setVisible(false);
+                 }
+                 else if(nowcombo>=scBound[0]){
+                     nowscore=nowscore+2*test0.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(true); lb2.setVisible(false); lb3.setVisible(false);
+                 }
+                 else{
+                     nowscore=nowscore+test0.getFirst().score;
+                     lb0.setVisible(true); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 }
                  waitdel.add(test0.pollFirst());
                  allow[0]=false;
                  key[0]=false;
+                 //lb0.setVisible(true);
              }
           }
           if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=400&&test0.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test0.pollFirst());
+                 //lb0.setVisible(false);
+                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 nowcombo=0;
           }
           if(allow[1]&&key[1]){
              if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=400&&test1.get(0).getY()-400<=range){
                  //System.out.println("hit");
+                 nowcombo=nowcombo+1;
+                 if(nowcombo>=scBound[2]){
+                     nowscore=nowscore+4*test1.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(true);
+                 }
+                 else if(nowcombo>=scBound[1]){
+                     nowscore=nowscore+3*test1.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(true); lb3.setVisible(false);
+                 }
+                 else if(nowcombo>=scBound[0]){
+                     nowscore=nowscore+2*test1.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(true); lb2.setVisible(false); lb3.setVisible(false);
+                 }
+                 else{
+                     nowscore=nowscore+test1.getFirst().score;
+                     lb0.setVisible(true); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 }
                  waitdel.add(test1.pollFirst());
                  allow[1]=false;
                  key[1]=false;
+                 //lb1.setVisible(true);
              }
           }
           if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=400&&test1.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test1.pollFirst());
+                 //lb1.setVisible(false);
+                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 nowcombo=0;
           }
           if(allow[2]&&key[2]){
              if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=400&&test2.get(0).getY()-400<=range){
                  //System.out.println("hit");
+                 nowcombo=nowcombo+1;
+                 if(nowcombo>=scBound[2]){
+                     nowscore=nowscore+4*test2.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(true);
+                 }
+                 else if(nowcombo>=scBound[1]){
+                     nowscore=nowscore+3*test2.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(true); lb3.setVisible(false);
+                 }
+                 else if(nowcombo>=scBound[0]){
+                     nowscore=nowscore+2*test2.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(true); lb2.setVisible(false); lb3.setVisible(false);
+                 }
+                 else{
+                     nowscore=nowscore+test2.getFirst().score;
+                     lb0.setVisible(true); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 }
                  waitdel.add(test2.pollFirst());
                  allow[2]=false;
                  key[2]=false;
+                 //lb2.setVisible(true);
              }
           }
           if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=400&&test2.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test2.pollFirst());
+                 //lb2.setVisible(false);
+                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 nowcombo=0;
           }
           if(allow[3]&&key[3]){
              if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=400&&test3.get(0).getY()-400<=range){
                  //System.out.println("hit");
+                 nowcombo=nowcombo+1;
+                 if(nowcombo>=scBound[2]){
+                     nowscore=nowscore+4*test3.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(true);
+                 }
+                 else if(nowcombo>=scBound[1]){
+                     nowscore=nowscore+3*test3.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(true); lb3.setVisible(false);
+                 }
+                 else if(nowcombo>=scBound[0]){
+                     nowscore=nowscore+2*test3.getFirst().score;
+                     lb0.setVisible(false); lb1.setVisible(true); lb2.setVisible(false); lb3.setVisible(false);
+                 }
+                 else{
+                     nowscore=nowscore+test3.getFirst().score;
+                     lb0.setVisible(true); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 }
                  waitdel.add(test3.pollFirst());
                  allow[3]=false;
                  key[3]=false;
+                 //lb3.setVisible(true);
              }
           }
           if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=400&&test3.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test3.pollFirst());
+                 //lb3.setVisible(false);
+                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 nowcombo=0;
           }
            //
            //move beats
@@ -333,6 +470,9 @@ public class GameWindow extends JPanel{
           }
           System.gc();
        }
+       waitdel.clear();
+       out.clear();
+       
        speaker.stop();
        speaker.close();
         frame.setVisible(false);

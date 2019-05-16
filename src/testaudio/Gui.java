@@ -57,6 +57,8 @@ public class Gui extends JFrame implements DropTargetListener {
     File folder;
     ListView view;
     JScrollPane jScrollPane;
+
+    
     @Override
     public void drop(DropTargetDropEvent dtde) {
         Object o = null;
@@ -238,7 +240,7 @@ public class Gui extends JFrame implements DropTargetListener {
                 bufferedReader.close();
                 str=str.substring(14);
                 System.gc();
-                if(str=="null"){
+                if("null".equals(str)){
                     return null;
                 }else if(new File(str).exists()){
                      return new File(str);
