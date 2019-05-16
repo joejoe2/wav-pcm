@@ -73,3 +73,5 @@ v-1.053-增加musiclist功能
 v-1.054-降低cpu使用率
 
 v-1.055-修正在檔案結尾的錯誤
+
+v-1.056-改進search policy  gamemode完成50%
