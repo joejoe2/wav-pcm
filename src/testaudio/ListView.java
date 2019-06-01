@@ -21,7 +21,7 @@ public class ListView extends JPanel{
         for(int i=0;i<list.size();i++){
             ListItem item=new ListItem(list.get(i).getName(),list.get(i), holder);
             this.add(item);
-            item.setSize(200,200);
+            item.setSize(200,50);
             
         }
     }

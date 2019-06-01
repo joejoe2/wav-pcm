@@ -29,6 +29,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+
 
 /**
  *
@@ -36,6 +38,7 @@ import javax.swing.JOptionPane;
  */
 public class GameMenu extends JFrame implements DropTargetListener{
     File file;
+    File arrange;
     private boolean requireddel;
     GameWindow gameWindow;
     @Override
@@ -58,6 +61,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
     public void drop(DropTargetDropEvent dtde) {
         Object o = null;
         file = null;
+        //arrange=null;
         dtde.acceptDrop(DnDConstants.ACTION_LINK);
         try {
             o = dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
@@ -101,7 +105,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
             requireddel = false;
         }
         try {
-            gameWindow=new GameWindow(file.getAbsoluteFile());
+            gameWindow=new GameWindow(file.getAbsoluteFile(),arrange);
             gameWindow.main();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -119,6 +123,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
             requireddel = false;
         }
         file = null;
+        arrange=null;
         this.setVisible(true);
         this.setAlwaysOnTop(true);
         this.toFront();
@@ -142,11 +147,67 @@ public class GameMenu extends JFrame implements DropTargetListener{
         back.addActionListener((e) -> {
             GameMenu.this.dispose();
         });
+        JButton chooseArrange=new JButton("choose_arrange");
+        chooseArrange.setSize(160,50);
+        chooseArrange.setLocation(150,30);
+        
+        JFileChooser chooser=new JFileChooser();
+        chooser.setCurrentDirectory(new File("."));
+        chooser.setDialogTitle("to choose arrange track");
+        chooser.setAcceptAllFileFilterUsed(false);
+        
+        chooseArrange.addActionListener((e)->{
+            
+           if(chooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
+                arrange=chooser.getSelectedFile();
+                if(!arrange.exists()){
+                    arrange=null;
+                    JOptionPane.showMessageDialog(this,"file does not exists!");
+                }
+            }
+            
+        });
         this.add(back);
+        this.add(chooseArrange);
         JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
-        label.setBounds(150, 300, 500, 100);
+        label.setBounds(150, 200, 500, 100);
         label.setForeground(Color.WHITE);
         this.add(label).setFont(new Font("", 1, 20));
+        
+        JLabel label2 = new JLabel("操作說明:", JLabel.LEFT);
+        label2.setBounds(150, 330, 500, 100);
+        label2.setForeground(Color.WHITE);
+        this.add(label2).setFont(new Font("", 1, 20));
+        
+        JLabel label3 = new JLabel("choose_arrange:選譜面的檔案", JLabel.LEFT);
+        label3.setBounds(150, 360, 500, 100);
+        label3.setForeground(Color.WHITE);
+        this.add(label3).setFont(new Font("", 1, 20));
+        
+        JLabel label4 = new JLabel("back:回到music analyzer/visualizer", JLabel.LEFT);
+        label4.setBounds(150, 390, 500, 100);
+        label4.setForeground(Color.WHITE);
+        this.add(label4).setFont(new Font("", 1, 20));
+        
+        JLabel label5 = new JLabel("拖曳音樂檔", JLabel.LEFT);
+        label5.setBounds(150, 420, 800, 100);
+        label5.setForeground(Color.WHITE);
+        this.add(label5).setFont(new Font("", 1, 20));
+        
+        JLabel label6 = new JLabel("進入music game，按A D G J鍵，", JLabel.LEFT);
+        label6.setBounds(150, 450, 500, 100);
+        label6.setForeground(Color.WHITE);
+        this.add(label6).setFont(new Font("", 1, 20));
+        
+        JLabel label7 = new JLabel("分別消除由左至右，第一 二 三 四軌道的方塊。", JLabel.LEFT);
+        label7.setBounds(150, 480, 500, 100);
+        label7.setForeground(Color.WHITE);
+        this.add(label7).setFont(new Font("", 1, 20));
+        
+        JLabel label8 = new JLabel("消除越多方塊以取得越高分吧~。", JLabel.LEFT);
+        label8.setBounds(150, 510, 500, 100);
+        label8.setForeground(Color.WHITE);
+        this.add(label8).setFont(new Font("", 1, 20));
         
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
     }

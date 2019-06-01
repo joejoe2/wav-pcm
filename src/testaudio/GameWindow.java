@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -47,8 +48,6 @@ public class GameWindow extends JPanel{
     boolean[] allow=new boolean[]{true,true,true,true};//avoid long press get hit beats
     BeatGenerator beatGenerator;//read from file and generate beats
     JLabel secJLabel;//time label
-    //JLabel scoreLabel;
-    //JLabel comboLabel;
     JLabel scoreJLabel;
     JLabel comboJLabel;
     int nowsec=0;//record time in sec
@@ -71,7 +70,7 @@ public class GameWindow extends JPanel{
     JLabel lb0,lb1,lb2,lb3;
     JPanel picpanel;
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {//suggested to override paintComponent instead of paint
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         
         
@@ -110,9 +109,9 @@ public class GameWindow extends JPanel{
 
     
  
-    public GameWindow(File f) throws Exception{
+    public GameWindow(File f,File arrange) throws Exception{
         //
-        beatGenerator=new BeatGenerator(null);
+        beatGenerator=new BeatGenerator(arrange);
         timing=beatGenerator.getTiming();
         test0=new LinkedList<Beat>();
         test1=new LinkedList<Beat>();
@@ -329,13 +328,11 @@ public class GameWindow extends JPanel{
                  waitdel.add(test0.pollFirst());
                  allow[0]=false;
                  key[0]=false;
-                 //lb0.setVisible(true);
              }
           }
           if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=400&&test0.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test0.pollFirst());
-                 //lb0.setVisible(false);
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
@@ -362,13 +359,11 @@ public class GameWindow extends JPanel{
                  waitdel.add(test1.pollFirst());
                  allow[1]=false;
                  key[1]=false;
-                 //lb1.setVisible(true);
              }
           }
           if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=400&&test1.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test1.pollFirst());
-                 //lb1.setVisible(false);
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
@@ -395,13 +390,11 @@ public class GameWindow extends JPanel{
                  waitdel.add(test2.pollFirst());
                  allow[2]=false;
                  key[2]=false;
-                 //lb2.setVisible(true);
              }
           }
           if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=400&&test2.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test2.pollFirst());
-                 //lb2.setVisible(false);
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
@@ -428,13 +421,11 @@ public class GameWindow extends JPanel{
                  waitdel.add(test3.pollFirst());
                  allow[3]=false;
                  key[3]=false;
-                 //lb3.setVisible(true);
              }
           }
           if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=400&&test3.get(0).getY()-400>range){
                  //System.out.println("miss");
                  out.add(test3.pollFirst());
-                 //lb3.setVisible(false);
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
@@ -455,7 +446,7 @@ public class GameWindow extends JPanel{
            out.forEach((b) -> {
                b.moveOffset(0,10);
            });
-          //
+          //use to contorl effect stage
           while(!waitdel.isEmpty()&&waitdel.peekFirst()!=null&&waitdel.peekFirst().stretch>=5){
                waitdel.pollFirst();
           }
@@ -468,13 +459,15 @@ public class GameWindow extends JPanel{
           while (speaker.getFramePosition() < index+framelimit) {
                   Thread.sleep(5);
           }
+          //clear beats
+          out.clear();
           System.gc();
        }
        waitdel.clear();
-       out.clear();
        
        speaker.stop();
        speaker.close();
+       JOptionPane.showMessageDialog(this,"your score: "+(int)nowscore);
         frame.setVisible(false);
         frame.dispose();
         frame=null;
