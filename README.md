@@ -13,7 +13,6 @@ update 2019 6 10
 
   2.執行程式主體(gui->testaudio->swingcanvas->gui)
 
-  3.測試記憶體占用 視情況重啟jvm
 
 
 穩定版本: v1.057
