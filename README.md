@@ -76,4 +76,4 @@ v-1.055-修正在檔案結尾的錯誤
 
 v-1.056-改進search policy  gamemode完成50%
 
-v-1.057-修正站存檔刪除的bug  gamemode完成90%
+v-1.057-修正暫存檔刪除的bug  gamemode完成90%
