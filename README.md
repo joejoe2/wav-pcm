@@ -29,6 +29,7 @@ library:mp3spi
 初次使用請至google drive下載完整版
 
 完整檔案位置(v1.057):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
+                       https://mega.nz/#!YYhUnAYQ!ywn2PisUq4n1rlT-D37fIumdrpiX5LSPrMEFYAm8ie0
 
 若要使用裝置本身的jre請點擊run.jar啟動(可刪除jre資料夾)
 
