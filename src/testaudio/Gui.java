@@ -209,36 +209,6 @@ public class Gui extends JFrame implements DropTargetListener {
         Gui.this.setAlwaysOnTop(false);
         //
         
-//        JLabel label = new JLabel("please drag wav or mp3 file here to start", JLabel.CENTER);
-//        label.setBounds(150, 200, 500, 100);
-//        label.setForeground(Color.WHITE);
-//        this.add(label).setFont(new Font("", 1, 20));
-//        
-//        JLabel label2 = new JLabel("操作說明:", JLabel.LEFT);
-//        label2.setBounds(150, 300, 500, 100);
-//        label2.setForeground(Color.WHITE);
-//        this.add(label2).setFont(new Font("", 1, 20));
-//        
-//        JLabel label3 = new JLabel("check update:檢查更新", JLabel.LEFT);
-//        label3.setBounds(150, 330, 500, 100);
-//        label3.setForeground(Color.WHITE);
-//        this.add(label3).setFont(new Font("", 1, 20));
-//        
-//        JLabel label4 = new JLabel("analyze mode:選擇模式--slow,normal or fast", JLabel.LEFT);
-//        label4.setBounds(150, 360, 500, 100);
-//        label4.setForeground(Color.WHITE);
-//        this.add(label4).setFont(new Font("", 1, 20));
-//        
-//        JLabel label5 = new JLabel("拖曳音樂檔或點擊choose folder選取音樂所在的資料夾", JLabel.LEFT);
-//        label5.setBounds(150, 390, 800, 100);
-//        label5.setForeground(Color.WHITE);
-//        this.add(label5).setFont(new Font("", 1, 20));
-//        
-//        JLabel label6 = new JLabel("game mode:遊戲模式", JLabel.LEFT);
-//        label6.setBounds(150, 420, 500, 100);
-//        label6.setForeground(Color.WHITE);
-//        this.add(label6).setFont(new Font("", 1, 20));
-        
     }
 
     public void writeRecord(){
@@ -333,7 +303,7 @@ public class Gui extends JFrame implements DropTargetListener {
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            file.deleteOnExit();
+            //file.deleteOnExit();
             requireddel = true;
         } else {
             requireddel = false;
@@ -382,7 +352,7 @@ public class Gui extends JFrame implements DropTargetListener {
     }
     
     public static void main(String[] args) {
-        new Gui();
+        Gui gui=new Gui();
     }
 
     public static void restart() throws IOException {

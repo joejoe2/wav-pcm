@@ -8,6 +8,7 @@ package testaudio;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Robot;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -18,12 +19,14 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.InputEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,6 +44,8 @@ public class GameMenu extends JFrame implements DropTargetListener{
     File arrange;
     private boolean requireddel;
     GameWindow gameWindow;
+    BufferedImage bg;   
+    
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
         //To change body of generated methods, choose Tools | Templates.
@@ -99,7 +104,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            file.deleteOnExit();
+            //file.deleteOnExit();
             requireddel = true;
         } else {
             requireddel = false;
@@ -109,7 +114,7 @@ public class GameMenu extends JFrame implements DropTargetListener{
             gameWindow.main();
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "can not surpport " + file.getName().substring(file.getName().lastIndexOf(".")) + " file!" + "\nonly surpport .wav or .mp3 now!");
+            JOptionPane.showMessageDialog(this,"file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
         }
         
         gameWindow = null;
@@ -131,6 +136,12 @@ public class GameMenu extends JFrame implements DropTargetListener{
     }
     
     public GameMenu(){
+        
+        try {
+            bg=ImageIO.read(getClass().getResource("/res/starry_sky2.jpg"));
+        } catch (IOException ex) {
+            Logger.getLogger(GameMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.pack();
         this.setTitle("music game menu");
         this.setSize(800, 700);

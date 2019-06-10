@@ -13,6 +13,8 @@ import java.awt.Graphics;
  */
 public class Beat {
 
+    
+
     /**
      * @return the x
      */
@@ -46,18 +48,22 @@ public class Beat {
     int width;
     float score;
     int stretch=0;
+    int line;
+    boolean bomb=false;
     
-    public Beat(int type,float score) {
+    public Beat(int type,float score,int line) {
         this.score=score;
         if(type==0){
-          width=40;
-          length=10;
+          width=1;
+          length=1;
         }
+        this.line=line;
+        
     }
     
     public void draw(Graphics g){
-       if(stretch==0){
-        g.fillRect((int)getX(), (int)getY(), width, length);
+       if(!bomb){
+        g.fillOval((int)getX(), (int)getY(), width, length);
        }else{
             
             for(int i=0;i<10;i++){
@@ -72,10 +78,17 @@ public class Beat {
     }
     
     public void stretch(){
-        moveOffset(-10f,-10f);
-            width+=20;
-            length+=20;
-        stretch++;
+         if(bomb)
+        {
+                width+=10;
+                length+=10;
+                ++stretch;
+                moveOffset(-5f,-5f);
+        }else{
+         width+=1;
+         length+=1;
+         }
+        
     }
     
 }

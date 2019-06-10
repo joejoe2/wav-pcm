@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,31 +57,43 @@ public class GameWindow extends JPanel{
     ArrayList<String> timing;//record when to check generate beats
     int holder=0;//hold the index of timing
     int range=40;//hit range
-    //int score;
-    //int combo;
     float nowscore=0;
     int nowcombo=0;
     int [] scBound={5,10,15};
     Color lineColor=new Color(255,255,255);
-    Color bgColor=new Color(0,0,160);
+    Color bgColor=new Color(100,100,255);
     Color boundColor=Color.gray;
     Color effectColor=new Color(255, 255,56);
     Color beatColor=Color.GREEN;
     ImageIcon pic0,pic1,pic2,pic3;
+    BufferedImage bg;
     JLabel lb0,lb1,lb2,lb3;
     JPanel picpanel;
+    
+    int px2[]={250,0,500,250};//首末点相重,才能画多边形 
+    int py2[]={100,600,600,100};
+    int px1[]={50,0,500,450,50};//首末点相重,才能画多边形 
+    int py1[]={500,600,600,500,500};
     @Override
     protected void paintComponent(Graphics g) {//suggested to override paintComponent instead of paint
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        g.drawImage(bg,0,0,getWidth(),getHeight(),1600/3,0,1600/3+800,896,null);
         
+                
+        g.setColor(new Color(255,100,100));
+        g.fillPolygon(px2,py2,4); 
         
         g.setColor(lineColor);
-        g.fillRect(0,400,500,range);
+        g.fillPolygon(px1,py1,5);
+        
         
         g.setColor(boundColor);
-        g.drawLine(125,0,125,800);
-        g.drawLine(250,0,250,800);
-        g.drawLine(375,0,375,800);
+        g.drawLine(250,100,0,600);
+        g.drawLine(250,100,125,600);
+        g.drawLine(250,100,250,600);
+        g.drawLine(250,100,375,600);
+        g.drawLine(250,100,500,600);
+        
         
         //
         g.setColor(beatColor);
@@ -103,6 +116,7 @@ public class GameWindow extends JPanel{
         g.setColor(effectColor);
         waitdel.forEach((b) -> {
             b.draw(g);
+            b.bomb=true;
         });
         
     }
@@ -119,6 +133,8 @@ public class GameWindow extends JPanel{
         test3=new LinkedList<Beat>();
         waitdel=new LinkedList<Beat>();
         out=new LinkedList<Beat>();
+        
+        bg=ImageIO.read(getClass().getResource("/res/Fate_Extella_background.png"));
         
         pic0=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic0.gif")));
         pic1=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic1.gif")));
@@ -169,7 +185,7 @@ public class GameWindow extends JPanel{
         file=f;
         frame=new JFrame();
         frame.setTitle("music game");
-        frame.setSize(1000, 800);
+        frame.setSize(1000, 600);
         frame.setResizable(false);
         frame.getContentPane().setBackground(Color.GRAY);//change color
         frame.getContentPane().setLayout(null);
@@ -184,12 +200,12 @@ public class GameWindow extends JPanel{
         frame.add(back);
         //
         //
-        /*secJLabel=new JLabel("0");
+        secJLabel=new JLabel("0.0");
         secJLabel.setSize(200,100);
         secJLabel.setLocation(0,100);
         secJLabel.setFont(new Font("",1,15));
         secJLabel.setForeground(Color.white);
-        frame.add(secJLabel);*/
+        frame.add(secJLabel);
         //
         scoreJLabel=new JLabel("0");
         scoreJLabel.setSize(200,100);
@@ -263,7 +279,7 @@ public class GameWindow extends JPanel{
           if(index+framelimit>=framelength)break;
           speaker.setLoopPoints(index, index+framelimit);
           speaker.loop(0);
-          //secJLabel.setText(nowsec+"."+nowdigit+" real:"+i * speaker.getMicrosecondLength() / framelength/1000000.0);
+          secJLabel.setText("time:"+nowsec+"."+nowdigit);
           scoreJLabel.setText("Score : "+(int)nowscore);
           comboJLabel.setText("Combo : "+nowcombo);
           ////generate beats check and update time
@@ -272,22 +288,22 @@ public class GameWindow extends JPanel{
                //can not use for loop due to linklist will be null whne it is empty
                   Beat b=beatGenerator.next(0, nowsec, nowdigit);
                   if(b!=null){
-                  b.setX(20);b.setY(-20);
+                  b.setX(250);b.setY(100);
                   test0.add(b);
                   }
                   b=beatGenerator.next(1, nowsec, nowdigit);
                   if(b!=null){
-                  b.setX(160);b.setY(-20);
+                  b.setX(250);b.setY(100);
                   test1.add(b);
                   }
                   b=beatGenerator.next(2, nowsec, nowdigit);
                   if(b!=null){
-                  b.setX(300);b.setY(-20);
+                  b.setX(250);b.setY(100);
                   test2.add(b);
                   }
                   b=beatGenerator.next(3, nowsec, nowdigit);
                   if(b!=null){
-                  b.setX(440);b.setY(-20);
+                  b.setX(250);b.setY(100);
                   test3.add(b);
                   }
                //
@@ -306,7 +322,7 @@ public class GameWindow extends JPanel{
           //check beats got hit or miss
           ////can not use for loop due to linklist will be null whne it is empty
           if(allow[0]&&key[0]){
-             if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=400&&test0.get(0).getY()-400<=range){
+             if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=500&&test0.get(0).getY()-500<=range){
                  //System.out.println("hit");
                  nowcombo=nowcombo+1;
                  if(nowcombo>=scBound[2]){
@@ -330,14 +346,14 @@ public class GameWindow extends JPanel{
                  key[0]=false;
              }
           }
-          if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=400&&test0.get(0).getY()-400>range){
+          if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=500&&test0.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test0.pollFirst());
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
           if(allow[1]&&key[1]){
-             if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=400&&test1.get(0).getY()-400<=range){
+             if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=500&&test1.get(0).getY()-500<=range){
                  //System.out.println("hit");
                  nowcombo=nowcombo+1;
                  if(nowcombo>=scBound[2]){
@@ -361,14 +377,14 @@ public class GameWindow extends JPanel{
                  key[1]=false;
              }
           }
-          if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=400&&test1.get(0).getY()-400>range){
+          if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=500&&test1.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test1.pollFirst());
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
           if(allow[2]&&key[2]){
-             if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=400&&test2.get(0).getY()-400<=range){
+             if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=500&&test2.get(0).getY()-500<=range){
                  //System.out.println("hit");
                  nowcombo=nowcombo+1;
                  if(nowcombo>=scBound[2]){
@@ -392,14 +408,14 @@ public class GameWindow extends JPanel{
                  key[2]=false;
              }
           }
-          if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=400&&test2.get(0).getY()-400>range){
+          if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=500&&test2.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test2.pollFirst());
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
                  nowcombo=0;
           }
           if(allow[3]&&key[3]){
-             if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=400&&test3.get(0).getY()-400<=range){
+             if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=500&&test3.get(0).getY()-500<=range){
                  //System.out.println("hit");
                  nowcombo=nowcombo+1;
                  if(nowcombo>=scBound[2]){
@@ -423,7 +439,7 @@ public class GameWindow extends JPanel{
                  key[3]=false;
              }
           }
-          if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=400&&test3.get(0).getY()-400>range){
+          if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=500&&test3.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test3.pollFirst());
                  lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
@@ -432,19 +448,23 @@ public class GameWindow extends JPanel{
            //
            //move beats
            test0.forEach((b) -> {
-               b.moveOffset(0,10);
+               b.moveOffset(-4.5f,10f);
+               b.stretch();
            });
            test1.forEach((b) -> {
-               b.moveOffset(0,10);
+               b.moveOffset(-1.9f,10f);
+               b.stretch();
            });
            test2.forEach((b) -> {
-               b.moveOffset(0,10);
+               b.moveOffset(0.7f,10f);
+               b.stretch();
            });
            test3.forEach((b) -> {
-               b.moveOffset(0,10);
+               b.moveOffset(3.3f,10f);
+               b.stretch();
            });
            out.forEach((b) -> {
-               b.moveOffset(0,10);
+               b.stretch();
            });
           //use to contorl effect stage
           while(!waitdel.isEmpty()&&waitdel.peekFirst()!=null&&waitdel.peekFirst().stretch>=5){

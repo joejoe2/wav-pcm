@@ -81,7 +81,7 @@ public class BeatGenerator {
             String[] line=l.split(",");
             if((line[0].equals(nowsec+"."+nowdigit))&&(Integer.parseInt(line[1])==trackid)){
                float score=Float.parseFloat(line[3]);
-               Beat obj=new Beat(0,score);
+               Beat obj=new Beat(0,score,trackid);
                holder++;
                return obj;
             }
