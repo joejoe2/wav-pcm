@@ -1,0 +1,17 @@
+sample file<
+track start
+line
+line
+line
+.
+..
+...
+track end
+>
+
+line=time in seconds with 1 digit(ex.0.0,1.0,4.9,70.1):item:item:item:item
+constraint 1-4 items
+item=track id(0-3):1:scores(float)
+
+notice that line should be in the increasing order of time(each line must have unique time) and
+itme should be in the increasing order of trackid(each item must have unique trackid)!!!
