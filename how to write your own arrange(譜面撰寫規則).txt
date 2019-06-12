@@ -14,4 +14,4 @@ constraint 1-4 items
 item=track id(0-3):1:scores(float)
 
 notice that line should be in the increasing order of time(each line must have unique time) and
-itme should be in the increasing order of trackid(each item must have unique trackid)!!!
+item should be in the increasing order of trackid(each item must have unique trackid)!!!

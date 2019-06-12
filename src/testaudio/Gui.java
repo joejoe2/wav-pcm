@@ -49,7 +49,7 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.056f;
+    static final float version = 1.06f;
     String[] modeOpt={"slow","normal","fast"};
     JComboBox comboBox;
     int musicNum=0;

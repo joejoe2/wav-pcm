@@ -60,9 +60,9 @@ public class GameWindow extends JPanel{
     float nowscore=0;
     int nowcombo=0;
     int [] scBound={5,10,15};
-    Color lineColor=new Color(255,255,255);
+    Color lineColor=new Color(155,155,155,100);
     Color bgColor=new Color(100,100,255);
-    Color boundColor=Color.gray;
+    Color boundColor=Color.white;
     Color effectColor=new Color(255, 255,56);
     Color beatColor=Color.GREEN;
     ImageIcon pic0,pic1,pic2,pic3;
@@ -80,7 +80,7 @@ public class GameWindow extends JPanel{
         g.drawImage(bg,0,0,getWidth(),getHeight(),1600/3,0,1600/3+800,896,null);
         
                 
-        g.setColor(new Color(255,100,100));
+        g.setColor(new Color(25,25,25,150));
         g.fillPolygon(px2,py2,4); 
         
         g.setColor(lineColor);
@@ -134,7 +134,7 @@ public class GameWindow extends JPanel{
         waitdel=new LinkedList<Beat>();
         out=new LinkedList<Beat>();
         
-        bg=ImageIO.read(getClass().getResource("/res/Fate_Extella_background.png"));
+        bg=ImageIO.read(getClass().getResource("/res/starry_sky2.jpg"));
         
         pic0=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic0.gif")));
         pic1=new ImageIcon(ImageIO.read(getClass().getResource("/res/pic1.gif")));
@@ -185,7 +185,7 @@ public class GameWindow extends JPanel{
         file=f;
         frame=new JFrame();
         frame.setTitle("music game");
-        frame.setSize(1000, 600);
+        frame.setSize(800, 600);
         frame.setResizable(false);
         frame.getContentPane().setBackground(Color.GRAY);//change color
         frame.getContentPane().setLayout(null);
@@ -201,30 +201,30 @@ public class GameWindow extends JPanel{
         //
         //
         secJLabel=new JLabel("0.0");
-        secJLabel.setSize(200,100);
-        secJLabel.setLocation(0,100);
+        secJLabel.setSize(200,50);
+        secJLabel.setLocation(0,200);
         secJLabel.setFont(new Font("",1,15));
         secJLabel.setForeground(Color.white);
         frame.add(secJLabel);
         //
         scoreJLabel=new JLabel("0");
-        scoreJLabel.setSize(200,100);
-        scoreJLabel.setLocation(700,100);
+        scoreJLabel.setSize(200,50);
+        scoreJLabel.setLocation(0,100);
         scoreJLabel.setFont(new Font("",1,15));
         scoreJLabel.setForeground(Color.white);
         frame.add(scoreJLabel);
         //
         comboJLabel=new JLabel("0");
-        comboJLabel.setSize(200,100);
-        comboJLabel.setLocation(700,200);
+        comboJLabel.setSize(200,50);
+        comboJLabel.setLocation(0,150);
         comboJLabel.setFont(new Font("",1,15));
         comboJLabel.setForeground(Color.white);
         frame.add(comboJLabel);
         //
         picpanel=new JPanel();
         picpanel.setBackground(Color.GRAY);
-        picpanel.setSize(330,frame.getHeight());
-        picpanel.setLocation(660,300);
+        picpanel.setSize(250,250);
+        picpanel.setLocation(0,300);
         frame.getContentPane().add(picpanel);
         //
         lb0=new JLabel(pic0);
@@ -259,7 +259,7 @@ public class GameWindow extends JPanel{
         
         this.setBackground(bgColor);
         this.setSize(500,frame.getHeight());
-        this.setLocation(150,0);
+        this.setLocation(300,0);
         frame.getContentPane().add(this);
         
         frame.setVisible(true);
@@ -349,8 +349,8 @@ public class GameWindow extends JPanel{
           if(!test0.isEmpty()&&test0.peekFirst()!=null&&test0.get(0).getY()>=500&&test0.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test0.pollFirst());
-                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
-                 nowcombo=0;
+                 //lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 //nowcombo=0;
           }
           if(allow[1]&&key[1]){
              if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=500&&test1.get(0).getY()-500<=range){
@@ -380,8 +380,8 @@ public class GameWindow extends JPanel{
           if(!test1.isEmpty()&&test1.peekFirst()!=null&&test1.get(0).getY()>=500&&test1.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test1.pollFirst());
-                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
-                 nowcombo=0;
+                 //lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 //nowcombo=0;
           }
           if(allow[2]&&key[2]){
              if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=500&&test2.get(0).getY()-500<=range){
@@ -411,8 +411,8 @@ public class GameWindow extends JPanel{
           if(!test2.isEmpty()&&test2.peekFirst()!=null&&test2.get(0).getY()>=500&&test2.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test2.pollFirst());
-                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
-                 nowcombo=0;
+                 //lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 //nowcombo=0;
           }
           if(allow[3]&&key[3]){
              if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=500&&test3.get(0).getY()-500<=range){
@@ -442,25 +442,32 @@ public class GameWindow extends JPanel{
           if(!test3.isEmpty()&&test3.peekFirst()!=null&&test3.get(0).getY()>=500&&test3.get(0).getY()-500>range){
                  //System.out.println("miss");
                  out.add(test3.pollFirst());
-                 lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
-                 nowcombo=0;
+                 //lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+                 //nowcombo=0;
+          }
+          //
+          //clear out beats
+          if(!out.isEmpty()){
+            out.clear();
+            lb0.setVisible(false); lb1.setVisible(false); lb2.setVisible(false); lb3.setVisible(false);
+            nowcombo=0;
           }
            //
            //move beats
            test0.forEach((b) -> {
-               b.moveOffset(-4.5f,10f);
+               b.moveOffset(-5.2f,10f);//-5.2
                b.stretch();
            });
            test1.forEach((b) -> {
-               b.moveOffset(-1.9f,10f);
+               b.moveOffset(-2.3f,10f);//-2.3
                b.stretch();
            });
            test2.forEach((b) -> {
-               b.moveOffset(0.7f,10f);
+               b.moveOffset(0.4f,10f);//0.4
                b.stretch();
            });
            test3.forEach((b) -> {
-               b.moveOffset(3.3f,10f);
+               b.moveOffset(3.1f,10f);//3.1
                b.stretch();
            });
            out.forEach((b) -> {
@@ -479,8 +486,7 @@ public class GameWindow extends JPanel{
           while (speaker.getFramePosition() < index+framelimit) {
                   Thread.sleep(5);
           }
-          //clear beats
-          out.clear();
+          
           System.gc();
        }
        waitdel.clear();

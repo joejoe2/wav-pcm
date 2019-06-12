@@ -5,6 +5,7 @@
  */
 package testaudio;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -25,6 +27,8 @@ public class BeatGenerator {
     ArrayList<String> notelist;
     ArrayList<String> timing;
     int holder=0;
+    BufferedImage bg;
+    
     public  BeatGenerator(File trackFile) {
         arrange=trackFile;
         InputStreamReader fileReader;
@@ -64,7 +68,8 @@ public class BeatGenerator {
                 timing.add(ThisLine[0]);
             }
             
-            
+            bg=ImageIO.read(getClass().getResource("/res/star1.png"));
+        
         } catch (Exception ex) {
             Logger.getLogger(BeatGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,7 +86,7 @@ public class BeatGenerator {
             String[] line=l.split(",");
             if((line[0].equals(nowsec+"."+nowdigit))&&(Integer.parseInt(line[1])==trackid)){
                float score=Float.parseFloat(line[3]);
-               Beat obj=new Beat(0,score,trackid);
+               Beat obj=new Beat(0,score,trackid,bg);
                holder++;
                return obj;
             }

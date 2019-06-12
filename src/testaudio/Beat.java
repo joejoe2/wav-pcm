@@ -6,6 +6,7 @@
 package testaudio;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -50,24 +51,26 @@ public class Beat {
     int stretch=0;
     int line;
     boolean bomb=false;
+    BufferedImage bg;
     
-    public Beat(int type,float score,int line) {
+    public Beat(int type,float score,int line,BufferedImage bg) {
         this.score=score;
         if(type==0){
           width=1;
           length=1;
         }
         this.line=line;
-        
+        this.bg=bg;
     }
     
     public void draw(Graphics g){
        if(!bomb){
-        g.fillOval((int)getX(), (int)getY(), width, length);
+        //g.fillOval((int)getX(), (int)getY(), width, length);
+        g.drawImage(bg,(int)getX(),(int)getY(),width*2,length*2,null);
        }else{
             
-            for(int i=0;i<10;i++){
-            g.drawOval((int)x,(int)y, width-i, length-i);
+            for(int i=0;i<15;i++){
+            g.drawOval((int)x,(int)y, width*2-i, length*2-i);
             }
         }
     }
@@ -83,7 +86,7 @@ public class Beat {
                 width+=10;
                 length+=10;
                 ++stretch;
-                moveOffset(-5f,-5f);
+                moveOffset(-5*2f,-5*2f);
         }else{
          width+=1;
          length+=1;
