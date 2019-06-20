@@ -1,11 +1,11 @@
 # wav-pcm
-update 2019 6 12
+update 2019 6 20
 
 功能:讀取並分析音樂檔的訊號(波形、頻率)、提供遊戲模式(可自主編寫譜面)
 
 支援檔案格式:wav、mp3
 
-使用教學： https://www.youtube.com/watch?v=FOZnBINrnXI
+使用教學： https://youtu.be/7ogZuG4KfF0
 
 主要架構:
 
