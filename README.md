@@ -71,14 +71,14 @@ v1.051-刪除過快的模式(too many repaint may out of control)
 
 v1.052-調整視窗大小、繪圖參數
 
-v-1.053-增加musiclist功能
+v1.053-增加musiclist功能
 
-v-1.054-降低cpu使用率
+v1.054-降低cpu使用率
 
-v-1.055-修正在檔案結尾的錯誤
+v1.055-修正在檔案結尾的錯誤
 
-v-1.056-改進search policy  gamemode完成50%
+v1.056-改進search policy  gamemode完成50%
 
-v-1.057-修正暫存檔刪除的bug  gamemode完成90%
+v1.057-修正暫存檔刪除的bug  gamemode完成90%
 
-v-1.06-gamemode完成
+v1.06-gamemode完成
