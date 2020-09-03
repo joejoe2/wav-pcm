@@ -1,13 +1,10 @@
 # wav-pcm
-update 2019 6 20
-
-目前不能播放太長的音樂（>5-6 min）之後有空再來改......
 
 功能:讀取並分析音樂檔的訊號(波形、頻率)、提供遊戲模式(可自主編寫譜面)
 
 支援檔案格式:wav、mp3
 
-使用教學： https://youtu.be/7ogZuG4KfF0
+舊版使用教學： https://www.youtube.com/watch?v=FOZnBINrnXI
 
 主要架構:
 
@@ -84,3 +81,5 @@ v1.056-改進search policy  gamemode完成50%
 v1.057-修正暫存檔刪除的bug  gamemode完成90%
 
 v1.06-gamemode完成
+
+目前不能播放太長的音樂（>5-6 min）之後有空再來改......
