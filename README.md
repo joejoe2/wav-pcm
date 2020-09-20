@@ -14,22 +14,20 @@
 
 
 
-穩定版本: v1.06
+穩定版本: v1.071
 
 JDK版本:1.8.0_181
 
-library:mp3spi
 
 更新方式:
-         於本頁下載TestAudio.jar覆蓋原同名檔案即可(v0.94以下的版本要多下載lib資料夾!!!!!!!)
          
-         或由主程式中的check update自動進行
+         由主程式中的check update自動進行
          
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-初次使用請至google drive下載完整版
+初次使用請下載完整版
 
-完整檔案位置(v1.06):   https://drive.google.com/file/d/1E9n5cMKU0PY7gFEOlqqt_b4gLBloZIVP/view?usp=sharing
+https://github.com/joejoe2/wav-pcm/releases/
 
 
 若要使用裝置本身的jre請點擊run.jar啟動(可刪除jre資料夾)
@@ -82,4 +80,4 @@ v1.057-修正暫存檔刪除的bug  gamemode完成90%
 
 v1.06-gamemode完成
 
-目前不能播放太長的音樂（>5-6 min）之後有空再來改......
+v1.071-增加修復lib功能、fft改用jtransform、頻譜加入a-weighting修正
