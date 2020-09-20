@@ -33,5 +33,18 @@ public class DownloadTest {
         buf.close();
         fout.close();
     }
-
+    public static void download_lib(String lib_name) throws Exception {
+        // TODO code application logic here
+        URL link = new URL("https://github.com/joejoe2/wav-pcm/raw/master/lib/"+lib_name);
+        HttpURLConnection con = (HttpURLConnection) link.openConnection();
+        BufferedInputStream buf = new BufferedInputStream(con.getInputStream());
+        FileOutputStream fout = new FileOutputStream("lib/"+lib_name);
+        int l = 0;
+        byte[] bytes = new byte[4096];
+        while ((l = buf.read(bytes)) != -1) {
+            fout.write(bytes, 0, l);
+        }
+        buf.close();
+        fout.close();
+    }
 }

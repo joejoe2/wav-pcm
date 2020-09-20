@@ -32,20 +32,13 @@ public class TestAudio {
     boolean isadjusting=false;
     int targettime=-1;
     final int averagenum;
+    final int waber_freq=4096;
     /**
      * @param args the command line arguments
      */
-    public TestAudio(File f,int mode) {
+    public TestAudio(File f) {
         file = f;
-        if(mode==0){
-          averagenum=16/2;
-        }else if(mode==1){
-          averagenum=12/2;
-        }else if(mode==2){
-          averagenum=8/2;
-        }else{
-          averagenum=16/2;
-        }
+        averagenum=1;
     }
 
     public void main() throws Exception {
@@ -59,6 +52,8 @@ public class TestAudio {
         AudioFormat format = audioinputstream.getFormat();
         int framelength = (int) audioinputstream.getFrameLength();
         int framesize = format.getFrameSize();
+        int samplerate = (int)format.getSampleRate();
+        int fhz_resolution=samplerate/waber_freq;
         byte[] bytes = new byte[framesize * framelength];
 
         int channel = format.getChannels();
@@ -110,9 +105,9 @@ public class TestAudio {
             audioinputstream = null;
         }
         
-        final int step = 128 *2* 2 * averagenum;
+        final int step = waber_freq * averagenum;
         
-        canvas = new SwingCanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength());
+        canvas = new SwingCanvas( channel, file.getName().replaceAll(".wav", ""), speaker.getMicrosecondLength(), fhz_resolution);
         file = null;
 
         System.gc();
@@ -151,7 +146,7 @@ public class TestAudio {
         slider.setSize(250,15);
         slider.setLocation(500,75);
         //
-        int[][] paintarr = new int[channel][128 * 2*2];
+        int[][] paintarr = new int[channel][waber_freq];
         //Thread p = null;
         //Thread play = null;
         System.gc();
@@ -186,20 +181,23 @@ public class TestAudio {
             
             
             if (i + step >= sample[0].length) {
+                System.out.println("out bound");
                 break;
             }
             try{
-            speaker.setLoopPoints(index, index + step);
+            //speaker.setLoopPoints(index, index + step);
             speaker.loop(0);
             }catch(Exception e){
-                   e.printStackTrace();
+                System.out.println(index+" "+index+step);   
+                e.printStackTrace();
             }
+            
             canvas.settime(i * speaker.getMicrosecondLength() / framelength);
  
             try {
                 for (int ch = 0; ch < channel; ch++) {
                     i=index;
-                    for (int k = 0; k < 128 * 2*2; k++) {
+                    for (int k = 0; k < waber_freq; k++) {
 
                         int sum = 0;
                         for (int j = 0; j < averagenum; j++) {
@@ -212,6 +210,7 @@ public class TestAudio {
                     }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
                 break;
             }
             canvas.update(paintarr);
@@ -252,6 +251,7 @@ public class TestAudio {
         this.targettime = targettime;
     }
     
+
     
     
 }
