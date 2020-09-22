@@ -5,7 +5,14 @@
  */
 package testaudio;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jtransforms.fft.DoubleFFT_1D;
 
 /**
@@ -91,4 +98,41 @@ public class Utils {
         
         return mag;
     }
+    
+    /**
+     * sort files by creationTime
+     * @param files - file array
+     * @param isDescending - use descending or ascending order
+     */
+    public static void sort_by_creationTime(File[] files, boolean isDescending) {
+        int flag=isDescending?1:-1;
+        Arrays.sort(files,new Comparator<File>(){
+            //sort into descending order
+            @Override
+            public int compare(File o1, File o2) {
+                try {
+                    FileTime t1=(FileTime) Files.getAttribute(o1.toPath(), "creationTime");
+                    FileTime t2=(FileTime) Files.getAttribute(o2.toPath(), "creationTime");
+                    return flag*t2.compareTo(t1);
+                } catch (IOException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return 0;
+            }
+        });
+    }
+    
+    /**
+     *  sort files by lastModifiedTime
+     * @param files - file array
+     * @param isDescending - use descending or ascending order
+     */
+    public static void sort_by_lastModifiedTime(File[] files, boolean isDescending) {
+        if(isDescending){
+            Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
+        }else{
+            Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+        }
+    }
+    
 }

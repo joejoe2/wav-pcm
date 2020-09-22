@@ -27,15 +27,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,7 +48,7 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.071f;
+    static final float version = 1.072f;
     String[] modeOpt = {"slow", "normal", "fast"};
     int musicNum = 0;
     ArrayList<File> filelist;
@@ -92,7 +89,8 @@ public class Gui extends JFrame implements DropTargetListener {
         if (files == null) {
             return;
         }
-        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed()); //faster
+        //sort files and dirs
+        Utils.sort_by_creationTime(files, true);
         for (File s : files) {
             if (s.isDirectory()) {
                 listAllFile(s);
@@ -102,7 +100,6 @@ public class Gui extends JFrame implements DropTargetListener {
                 musicNum++;
             }
         }
-        //filelist.sort(Comparator.comparingLong(File::lastModified).reversed());  //slower
     }
 
     public Gui() throws HeadlessException {
