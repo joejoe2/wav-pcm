@@ -51,7 +51,7 @@ public class Gui extends JFrame implements DropTargetListener {
     TestAudio test;
     File file;
     private boolean requireddel;
-    static final float version = 1.07f;
+    static final float version = 1.071f;
     String[] modeOpt = {"slow", "normal", "fast"};
     int musicNum = 0;
     ArrayList<File> filelist;
@@ -92,6 +92,7 @@ public class Gui extends JFrame implements DropTargetListener {
         if (files == null) {
             return;
         }
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed()); //faster
         for (File s : files) {
             if (s.isDirectory()) {
                 listAllFile(s);
@@ -100,16 +101,15 @@ public class Gui extends JFrame implements DropTargetListener {
                 filelist.add(s);
                 musicNum++;
             }
-
         }
-
+        //filelist.sort(Comparator.comparingLong(File::lastModified).reversed());  //slower
     }
 
     public Gui() throws HeadlessException {
         //check libs
         String[] missing = LibCheck.check_lib();
         if (missing == null || missing.length == 0) {
-            JOptionPane.showMessageDialog(this, "no missing libs");
+            //JOptionPane.showMessageDialog(this, "no missing libs");
         } else {
             String missmsg = "missing libs:";
             for (String lib : missing) {
@@ -122,6 +122,7 @@ public class Gui extends JFrame implements DropTargetListener {
                     DownloadTest.download_lib(lib);
                 }
                 JOptionPane.showMessageDialog(this, "recover successfully!");
+                restart();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "network error!\n plz go to download and place files at lib/");
@@ -180,14 +181,6 @@ public class Gui extends JFrame implements DropTargetListener {
         vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
         //
-        //
-        //
-        JLabel modetxt = new JLabel("analyze mode:");
-        modetxt.setFont(new Font("", 1, 15));
-        modetxt.setForeground(Color.WHITE);
-        modetxt.setSize(200, 30);
-        modetxt.setLocation(150, 40);
-        this.add(modetxt);
 
         //
         JFileChooser chooser = new JFileChooser();
