@@ -14,7 +14,7 @@
 
 
 
-穩定版本: v1.071
+穩定版本: v1.072
 
 JDK版本:1.8.0_181
 
@@ -81,3 +81,5 @@ v1.057-修正暫存檔刪除的bug  gamemode完成90%
 v1.06-gamemode完成
 
 v1.071-增加修復lib功能、fft改用jtransform、頻譜加入a-weighting修正
+
+v1.072-頻譜改用b-weighting修正、顯示平滑化
