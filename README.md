@@ -4,7 +4,7 @@
 
 支援檔案格式:wav、mp3
 
-舊版使用教學： https://www.youtube.com/watch?v=FOZnBINrnXI
+使用教學： https://youtu.be/i8-5MB8ArHs
 
 主要架構:
 
