@@ -9,10 +9,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JScrollPane;
 import org.jtransforms.fft.DoubleFFT_1D;
 
 /**
@@ -20,6 +22,46 @@ import org.jtransforms.fft.DoubleFFT_1D;
  * @author 70136
  */
 public class Utils {
+    /**
+     * seach all .mp3 or .wav in target folder
+     * @param folder - seaching target
+     * @return ArrayList - found files
+     */
+    public static ArrayList<File> listAllFile(File folder) {
+        ArrayList<File> filelist=new ArrayList<>();
+        File[] files = folder.listFiles();
+        if (files == null) {
+            return filelist;
+        }
+        //sort files and dirs
+        Utils.sort_by_creationTime(files, true);
+        for (File s : files) {
+            if (s.isDirectory()) {
+                filelist.addAll(listAllFile(s));
+            } else if (s.getName().endsWith(".mp3") || s.getName().endsWith(".wav")) {
+                filelist.add(s);
+            }
+        }
+        
+        return filelist;
+    }
+    
+    /**
+     *combine two 8 bit byte into 16 bit short int
+     * @param high - high byte
+     * @param low - low byte
+     * @return - 16 bit short int in [high:low]
+     */
+    public static short get16bitnum(byte high, byte low) {
+        short num = 0;
+        short h = high;
+        short l = low;
+        num |= l;
+        h <<= 8;
+        num |= h;
+        return num;
+    }
+    
     /**
      * remove signal's dc effect
      *

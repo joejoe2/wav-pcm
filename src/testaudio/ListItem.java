@@ -1,6 +1,5 @@
 package testaudio;
 
-
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,27 +12,30 @@ import javax.swing.border.EtchedBorder;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author 70136
  */
-public class ListItem extends JLabel{
-     File file;
-    public ListItem(String text,File file,Gui holder) {
+public class ListItem extends JLabel {
+
+    File file;
+
+    /**
+     *create a list item (startAnalysis when clicked)
+     * @param text - list item text
+     * @param file - represented file
+     * @param holder - parant component with function for clicked on list item
+     */
+    public ListItem(String text, File file, Gui holder) {
         super(text);
-        this.file=file;
+        this.file = file;
         this.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                holder.file=file;
-                Thread t = new Thread(() -> {
-            if (file != null) {
-                holder.startAnalysis();
-            }
-            });
-              t.start();
+                if (file != null) {
+                    holder.startAnalysis(file);
+                }
             }
 
             @Override
@@ -57,6 +59,5 @@ public class ListItem extends JLabel{
             }
         });
     }
-    
-    
+
 }

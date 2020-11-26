@@ -7,7 +7,6 @@ package testaudio;
 
 import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Robot;
@@ -21,17 +20,11 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URI;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -45,91 +38,45 @@ import javax.swing.JScrollPane;
  */
 public class Gui extends JFrame implements DropTargetListener {
 
-    TestAudio test;
-    File file;
-    private boolean requireddel;
-    static final float version = 1.072f;
-    String[] modeOpt = {"slow", "normal", "fast"};
-    int musicNum = 0;
-    ArrayList<File> filelist;
-    File folder;
-    ListView view;
-    JScrollPane jScrollPane;
-
-    @Override
-    public void drop(DropTargetDropEvent dtde) {
-        Object o = null;
-        file = null;
-        dtde.acceptDrop(DnDConstants.ACTION_LINK);
-        try {
-            o = dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-            List<File> l = (List<File>) (o);
-            file = l.get(0);
-        } catch (UnsupportedFlavorException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        } catch (AWTException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Thread t = new Thread(() -> {
-            if (file != null) {
-                startAnalysis();
-            }
-        });
-        t.start();
-    }
-
-    public void listAllFile(File folder) {
-
-        File[] files = folder.listFiles();
-        if (files == null) {
-            return;
-        }
-        //sort files and dirs
-        Utils.sort_by_creationTime(files, true);
-        for (File s : files) {
-            if (s.isDirectory()) {
-                listAllFile(s);
-            } else if (s.getName().endsWith(".mp3") || s.getName().endsWith(".wav")) {
-                //System.out.println(s.getName());
-                filelist.add(s);
-                musicNum++;
-            }
-        }
-    }
+    //analyze handler
+    private TestAudio test;
+    //search file list
+    private ArrayList<File> filelist;
+    //selected folder for search
+    private File folder;
+    //gui component
+    private ListView view;
+    private JScrollPane jScrollPane;
+    private JButton check;
+    private JButton toGameMenu;
+    private JButton chbtn;
+    private JFileChooser chooser;
+    private JLabel vlabel;
 
     public Gui() throws HeadlessException {
         //check libs
-        String[] missing = LibCheck.check_lib();
-        if (missing == null || missing.length == 0) {
-            //JOptionPane.showMessageDialog(this, "no missing libs");
-        } else {
-            String missmsg = "missing libs:";
-            for (String lib : missing) {
-                missmsg += "\n" + lib;
-            }
-            missmsg += "\ntry to recover !";
-            JOptionPane.showMessageDialog(this, missmsg);
-            try {
-                for (String lib : missing) {
-                    DownloadTest.download_lib(lib);
-                }
-                JOptionPane.showMessageDialog(this, "recover successfully!");
-                restart();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "network error!\n plz go to download and place files at lib/");
-                try {
-                    Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm/tree/master/lib"));
-                } catch (Exception ex1) {
-                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-            }
-        }
+        LibCheck.check_lib(this);
+        //set layouts
+        set_layouts();
+        //set listeners
+        set_listeners();
+        //read setting
+        folder = Recoord.readRecord();
+        //update music list
+        update_musicList();
+        //other configs
+        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Gui.this.setAlwaysOnTop(true);
+        Gui.this.toFront();
+        Gui.this.setAlwaysOnTop(false);
+    }
+
+    /**
+     * setup layout
+     */
+    private void set_layouts() {
         //main window
         this.setTitle("music analyzer / visualizer");
         this.setSize(800, 700);
@@ -137,220 +84,167 @@ public class Gui extends JFrame implements DropTargetListener {
         getContentPane().setBackground(Color.GRAY);//change color
         getContentPane().setLayout(null);
         //check update
-        JButton check = new JButton("check update");
-        check.addActionListener((ActionEvent e) -> {
-            String ver = UpdateCheck.getver();
-            if (ver == null) {
-                JOptionPane.showMessageDialog(this, "network error!");
-            } else if (version < Float.parseFloat(ver)) {
-                JOptionPane.showMessageDialog(this, "                you have a new version(" + ver + ") of the application\nplease check <https://github.com/joejoe2/wav-pcm> for update");
-                int opt = JOptionPane.showConfirmDialog(this, "do you want to download automatically?", "update check", JOptionPane.YES_NO_OPTION);
-                try {
-                    if (opt == JOptionPane.YES_OPTION) {
-                        DownloadTest.autoupdate();
-                        JOptionPane.showMessageDialog(this, "update successfully!");
-                        restart();
-                    } else {
-                        Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm"));
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "network error!");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "you are latest now!");
-            }
-        });
+        check = new JButton("check update");
         check.setLocation(0, 30);
         check.setSize(120, 50);
         this.add(check);
-        //
-        JButton toGameMenu = new JButton("game mode");
-        toGameMenu.addActionListener((e) -> {
-            starGameMenu();
-        });
+        //game mode
+        toGameMenu = new JButton("game mode");
         toGameMenu.setLocation(0, 90);
         toGameMenu.setSize(120, 50);
         this.add(toGameMenu);
-        //
-        JLabel vlabel = new JLabel("version:" + version);
+        //version
+        vlabel = new JLabel("version:" + UpdateCheck.version);
         vlabel.setLocation(0, 0);
         vlabel.setSize(120, 25);
         vlabel.setForeground(Color.WHITE);
         this.add(vlabel).setFont(new Font("", 1, 15));
-        //
-
-        //
-        JFileChooser chooser = new JFileChooser();
+        //Folder Chooser
+        chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("."));
         chooser.setDialogTitle("select where to search your music");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
-
-        //
-        JButton chbtn = new JButton("choose folder");
+        //choose folder
+        chbtn = new JButton("choose folder");
         chbtn.setFont(new Font("", 1, 15));
         chbtn.setSize(150, 50);
         chbtn.setLocation(650, 120);
         this.add(chbtn);
 
+    }
+
+    /**
+     * bind listeners of gui components
+     */
+    private void set_listeners() {
+        check.addActionListener((ActionEvent e) -> {
+            //press to check update
+            UpdateCheck.check_ver(this);
+        });
+        toGameMenu.addActionListener((e) -> {
+            //press to open game menu 
+            startGameMenu();
+        });
         chbtn.addActionListener((e) -> {
+            //press to choose searching folder
             if (chooser.showOpenDialog(Gui.this) == JFileChooser.APPROVE_OPTION) {
                 folder = chooser.getSelectedFile();
                 System.out.println(folder);
-                search();
+                //update music list by selected folder
+                update_musicList();
                 Gui.this.revalidate();
                 Gui.this.repaint();
-                Gui.this.writeRecord();
+                //save folder to record
+                Recoord.writeRecord(folder);
             }
         });
-
-        //
-        folder = readRecord();
-        search();
-        //
-        //
-
-        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_LINK, this, true));
-        this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Gui.this.setAlwaysOnTop(true);
-        Gui.this.toFront();
-        Gui.this.setAlwaysOnTop(false);
-        //
-
     }
 
-    public void writeRecord() {
-        if (new File("setting.ini").exists() && folder != null && folder.exists()) {
-            File ini = new File("setting.ini");
-            try {
-                ini.createNewFile();
-                PrintWriter printWriter = new PrintWriter(ini, "UTF-8");
-                printWriter.println("search folder:" + folder);
-                printWriter.flush();
-                printWriter.close();
-                System.gc();
-            } catch (Exception e) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
-    }
-
-    public File readRecord() {
-        if (new File("setting.ini").exists()) {
-            File ini = new File("setting.ini");
-            try {
-                FileInputStream in = new FileInputStream(ini);
-                InputStreamReader reader = new InputStreamReader(in, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(reader);
-                String str = bufferedReader.readLine();
-                in.close();
-                reader.close();
-                bufferedReader.close();
-                str = str.substring(14);
-                System.gc();
-                if ("null".equals(str)) {
-                    return null;
-                } else if (new File(str).exists()) {
-                    return new File(str);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-
-        } else {
-            File ini = new File("setting.ini");
-            try {
-                ini.createNewFile();
-                PrintWriter printWriter = new PrintWriter(ini);
-                printWriter.println("search folder:null");
-                printWriter.flush();
-                printWriter.close();
-                System.gc();
-            } catch (IOException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-        }
-
-        return null;
-    }
-
-    public void search() {
-        Thread s = new Thread(() -> {
+    /**
+     * asyn update the searching music list and view
+     */
+    private void update_musicList() {
+        //asyn to seach and update music list
+        Thread t = new Thread(() -> {
             if (folder != null && filelist == null && jScrollPane == null && view == null) {
-                filelist = new ArrayList<File>();
-                listAllFile(folder);
+                //if does not assign any searching folder last time
+                //get all music file in folder
+                filelist = Utils.listAllFile(folder);
+                //create the list view
                 view = new ListView(filelist, this);
-
+                //create scroll pane
                 jScrollPane = new JScrollPane(view);
                 jScrollPane.setSize(795, 500);
                 jScrollPane.setLocation(0, 170);
                 jScrollPane.getVerticalScrollBar().setUnitIncrement(jScrollPane.getVerticalScrollBar().getUnitIncrement() * 6);
                 this.add(jScrollPane);
             } else if (folder != null) {
-                filelist = new ArrayList<File>();
-                listAllFile(folder);
+                //direct update lsit view
+                filelist = Utils.listAllFile(folder);
                 view.update(filelist, this);
             }
-            Gui.this.repaint();
-            Gui.this.revalidate();
+            jScrollPane.revalidate();
         });
-        s.start();
-
+        //start in another thread
+        t.start();
     }
 
-    public void startAnalysis() {
+    /**
+     * start the analyze task in another thread
+     *
+     * @param file - analyze target music file
+     */
+    void startAnalysis(File file) {
+        Thread t = new Thread(() -> {
+            startProgress(file);
+        });
+        t.start();
+    }
+
+    /**
+     * analyze the music
+     *
+     * @param file - analyze target music file
+     */
+    private void startProgress(File file) {
+        //hide start window
         this.setVisible(false);
+        //flag for whether to del temp file
+        boolean requireddel = false;
+        //check and convert to supported file format(wav) of java sound api
         if (file.getName().endsWith(".mp3")) {
+            //mp3 shold be convert into temp wav file
             try {
                 file = Convert.mp3ToWav(file.getAbsoluteFile());
                 System.gc();
-            } catch (UnsupportedAudioFileException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //file.deleteOnExit();
+            //the temp wav file need to be delete after play
             requireddel = true;
-        } else {
+        } else if (file.getName().endsWith(".wav")) {
+            //the origin wav file dose not need to be delete after play
             requireddel = false;
+        } else {
+            //un-supported file format
+            JOptionPane.showMessageDialog(this, "file is not supported\n(only surpport .wav or .mp3)");
+            return;
         }
 
-        test = new TestAudio(file.getAbsoluteFile());
-
         try {
-            System.gc();
-            test.main();
+            //start analyze progress
+            test = new TestAudio(file.getAbsoluteFile());
+            //start play
+            test.start();
             test = null;
+            //finish play
+            //after play need to del temp wav file
             if (requireddel) {
-                System.gc();
                 file.delete();
                 requireddel = false;
             }
             file = null;
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "file may be changed or not supported\n(only surpport .wav or .mp3 now!)");
+        } finally {
+            System.gc();
         }
 
-        search();
+        //update music list before go back to start window
+        update_musicList();
 
+        //restore start window
         this.setVisible(true);
         this.setAlwaysOnTop(true);
         this.toFront();
         this.setAlwaysOnTop(false);
-        /*if (Runtime.getRuntime().totalMemory() >= 300 * 1000 * 1000) {
-            try {
-                restart();
-            } catch (IOException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }*/
     }
 
-    public void starGameMenu() {
+    /**
+     * open the game menu window
+     */
+    private void startGameMenu() {
         this.setVisible(false);
         GameMenu menu = new GameMenu();
         Gui.this.setVisible(true);
@@ -359,15 +253,44 @@ public class Gui extends JFrame implements DropTargetListener {
         Gui.this.setAlwaysOnTop(false);
     }
 
+    /**
+     * program entry
+     *
+     * @param args - sys args
+     */
     public static void main(String[] args) {
         Gui gui = new Gui();
     }
 
-    public static void restart() throws IOException {
-
-        Runtime.getRuntime().exec("java -jar run.jar");
-        System.exit(0);
-
+    /**
+     * Override drop on window for drag and play
+     */
+    @Override
+    public void drop(DropTargetDropEvent dtde) {
+        dtde.acceptDrop(DnDConstants.ACTION_LINK);
+        File file = null;
+        try {
+            //get the drag on files when dropped down
+            List<File> l = (List<File>) (dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+            //only get the first file
+            file = l.get(0);
+        } catch (UnsupportedFlavorException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //mask for only accepted when mouse released
+        try {
+            new Robot().mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        } catch (AWTException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //check there is no exception for drag and drop file
+        if (file == null) {
+            return;
+        }
+        //start analye progress 
+        startAnalysis(file);
     }
 
     @Override

@@ -5,13 +5,17 @@
  */
 package testaudio;
 
+import java.awt.Component;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,8 +23,10 @@ import java.util.logging.Logger;
  */
 public class UpdateCheck {
 
-    /**
-     * @param args the command line arguments
+    static final float version = 1.08f;
+
+    /**get the latest vesion num in string
+     * @return - null or a flaot string
      */
     public static String getver() {
         String url = "https://github.com/joejoe2/wav-pcm";
@@ -40,7 +46,6 @@ public class UpdateCheck {
                 if (result == -1) {
                     return null;
                 }
-                //System.out.println(line);
                 return line.substring(result + 8, line.indexOf(".txt"));
             } catch (IOException ex) {
                 Logger.getLogger(UpdateCheck.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,4 +58,39 @@ public class UpdateCheck {
         return null;
     }
 
+    /**
+     *check and select whether to update 
+     * @param context - base gui component for JOptionPane
+     */
+    static void check_ver(Component context) {
+        String ver = UpdateCheck.getver();
+        if (ver == null) {
+            JOptionPane.showMessageDialog(context, "network error!");
+        } else if (version < Float.parseFloat(ver)) {
+            JOptionPane.showMessageDialog(context, "                you have a new version(" + ver + ") of the application\nplease check <https://github.com/joejoe2/wav-pcm> for update");
+            int opt = JOptionPane.showConfirmDialog(context, "do you want to download automatically?", "update check", JOptionPane.YES_NO_OPTION);
+            try {
+                if (opt == JOptionPane.YES_OPTION) {
+                    Download.download_update();
+                    JOptionPane.showMessageDialog(context, "update successfully!");
+                    restart();
+                } else {
+                    Desktop.getDesktop().browse(new URI("https://github.com/joejoe2/wav-pcm"));
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(context, "network error!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(context, "you are latest now!");
+        }
+    }
+
+    /**
+     *restart app to complete update 
+     * @throws IOException
+     */
+    static void restart() throws IOException {
+        Runtime.getRuntime().exec("java -jar run.jar");
+        System.exit(0);
+    }
 }

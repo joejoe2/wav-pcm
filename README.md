@@ -83,3 +83,5 @@ v1.06-gamemode完成
 v1.071-增加修復lib功能、fft改用jtransform、頻譜加入a-weighting修正
 
 v1.072-頻譜改用b-weighting修正、顯示平滑化
+
+v1.08-refactor program structure of visualizer part、分析計算時改用audio stream即時讀取(可減少部分memory使用)

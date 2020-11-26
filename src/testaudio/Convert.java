@@ -19,6 +19,13 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class Convert {
 
+    /**
+     *convert mp3 to wav and return that wav file
+     * @param mp3Data - source mp3 file
+     * @return - target wav file
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     */
     public static File mp3ToWav(File mp3Data) throws UnsupportedAudioFileException, IOException {
         // open stream
         AudioInputStream mp3Stream = AudioSystem.getAudioInputStream(mp3Data);
